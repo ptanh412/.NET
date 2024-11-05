@@ -135,5 +135,10 @@ namespace SE_Project
             addUserControl2(addProjects);
             addProjects.RequestPanelBack += Add_Project_RequestPanelBack;
         }
+
+        private void projectList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }
