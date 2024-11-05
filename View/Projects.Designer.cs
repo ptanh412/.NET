@@ -86,6 +86,7 @@
             this.projectList.Name = "projectList";
             this.projectList.Size = new System.Drawing.Size(885, 240);
             this.projectList.TabIndex = 0;
+            this.projectList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.projectList_CellContentClick_1);
             // 
             // guna2Panel3
             // 
