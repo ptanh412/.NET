@@ -68,6 +68,18 @@ namespace SE_Project.Model
                 this.project_id = value;
             }
         }
+        public string created_by;
+        public string Created_by
+        {
+            get
+            {
+                return this.created_by;
+            }
+            set
+            {
+                this.created_by = value;
+            }
+        }
         public ProjectModel()
         {
         }

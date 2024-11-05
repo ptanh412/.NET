@@ -23,7 +23,7 @@ namespace SE_Project.Forms
         public AddProjects()
         {
             InitializeComponent();
-           
+            
             this.guna2ImageButton1.Click += guna2ImageButton1_Click;
         }
         public void SetDataToText(object item)

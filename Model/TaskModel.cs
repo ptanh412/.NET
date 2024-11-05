@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SE_Project.Model
 {
-    internal class TaskModel: IModel
+    public class TaskModel: IModel
     {
         public int id;
         public int Id
@@ -73,6 +73,12 @@ namespace SE_Project.Model
         {
             get { return this.due_date; }
             set { this.due_date = value; }
+        }
+        public string assigned;
+        public string Assigned
+        {
+            get { return this.assigned; }
+            set { this.assigned = value; }
         }
         public TaskModel(string name, string description, int project_id, int user_id, string status, DateTime due_date)
         {

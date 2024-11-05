@@ -18,16 +18,51 @@ namespace SE_Project
     public partial class Projects : UserControl
     {
         ProjectController projectController;
+        private int selectedRow;
+        private int lastSelectedRow = -1;
+
         public Projects()
         {
             InitializeComponent();
-            AllProjects project_1 = new AllProjects();
+            AllProjects project_1 = new AllProjects(selectedRow);
             projectController = new ProjectController();
             addUserControl(project_1);
             projectController.Load();
             LoadProjects();
-        }
+            projectList.SelectionChanged += projectList_SelectionChanged;
 
+            projectList.CellClick += projectList_CellClick;
+        }
+        private bool IsRowValid(DataGridViewRow row)
+        {
+            return row != null &&
+                   row.Cells["Id"].Value != null &&
+                   !string.IsNullOrWhiteSpace(row.Cells["Id"].Value.ToString());
+        }
+        private void projectList_SelectionChanged(object sender, EventArgs e)
+        {
+            if (projectList.SelectedRows.Count == 0)
+            {
+                lastSelectedRow = -1;
+            }
+        }
+        private void projectList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= projectList.Rows.Count) return;
+            DataGridViewRow row = projectList.Rows[e.RowIndex];
+            if (!IsRowValid(row)) return;
+
+            selectedRow = (int)row.Cells["Id"].Value;
+            ProjectModel project = projectController.Items
+                .Cast<ProjectModel>()
+                .FirstOrDefault(p => p.Id == selectedRow);
+
+            if (project == null) return;
+
+            // Set the data to the textboxes
+            //guna2TextBox1.Text = project.Name;
+            //guna2TextBox2.Text = project.Description;
+        }       
         private void addUserControl(UserControl userControl)
         {
             userControl.Dock = DockStyle.Fill;
@@ -58,7 +93,6 @@ namespace SE_Project
             }
 
             projectList.ClearSelection();
-
         }
 
 
@@ -70,7 +104,7 @@ namespace SE_Project
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            AllProjects allProjects = new AllProjects();
+            AllProjects allProjects = new AllProjects(selectedRow);
             addUserControl(allProjects);
         }
 
@@ -136,6 +170,7 @@ namespace SE_Project
             addProjects.RequestPanelBack += Add_Project_RequestPanelBack;
         }
 
+        private void guna2Panel1_Paint_1(object sender, PaintEventArgs e)
         private void projectList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 

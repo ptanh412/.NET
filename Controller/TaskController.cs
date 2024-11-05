@@ -1,16 +1,16 @@
-﻿using System;
+﻿using SE_Project.Helpers;
+using SE_Project.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SE_Project.Helpers;
-using SE_Project.Model;
 
 namespace SE_Project.Controller
 {
-    internal class ProjectController : IController
+    internal class TaskController: IController
     {
-        public ProjectController()
+        public TaskController()
         {
             items = new List<IModel>(); // Khởi tạo danh sách ở đây
         }
@@ -26,11 +26,10 @@ namespace SE_Project.Controller
 
         public bool Create(IModel model)
         {
-            var project = model as ProjectModel;
-            if (project == null) return false;
-            bool result = DBHelper.CreateProject(project.Name, project.Description, project.User_id);
-            if (result) items.Add(project);
-
+            var task = model as TaskModel;
+            if (task == null) return false;
+            bool result = DBHelper.CreateTask(task.Name, task.Description, task.Project_id, task.Status, task.Due_date, task.User_id );
+            if (result) items.Add(task);
             return result;
         }
         public bool Delete(IModel model)
@@ -42,25 +41,27 @@ namespace SE_Project.Controller
         {
             if (id == null) return false;
 
-            bool result = DBHelper.DeleteProject((int)id);
-            if (result) items.RemoveAll(p => ((ProjectModel)p).Id == (int)id);
+            bool result = DBHelper.DeleteTask((int)id);
+            if (result) items.RemoveAll(p => ((TaskModel)p).Id == (int)id);
             return result;
         }
 
         public bool Load()
         {
             items.Clear();
-            List<ProjectModel> projects = DBHelper.GetProjects();
+            List<TaskModel> tasks = DBHelper.GetTasks();
 
-            if (projects == null) return false;
+            if (tasks == null) return false;
 
-            foreach (var project in projects)
+            foreach (var task in tasks)
             {
-                // Lấy thông tin dự án cùng với tên người dùng
-                var fullProject = DBHelper.GetProjectWithUserNameById(project.Id);
-                if (fullProject != null)
+                var fullTasks = DBHelper.GetTasksByProjectId(task.Project_id);
+                if (fullTasks != null)
                 {
-                    items.Add(fullProject); // Thêm dự án đã có tên người dùng vào danh sách
+                    foreach (var fullTask in fullTasks)
+                    {
+                        items.Add((IModel)fullTask);
+                    }
                 }
             }
             return true;
@@ -68,6 +69,20 @@ namespace SE_Project.Controller
 
         public bool Load(object id)
         {
+            items.Clear();
+            List<TaskModel> tasks = DBHelper.GetTasks();
+
+            if (tasks == null) return false;
+            //var fullTasks = DBHelper.GetTasksByProjectId();
+            //if (fullTasks != null)
+            //{
+            //    foreach (var fullTask in fullTasks)
+            //    {
+            //        items.Add((IModel)fullTask);
+            //    }
+            //}
+
+
             return true;
         }
 
@@ -103,4 +118,3 @@ namespace SE_Project.Controller
         }
     }
 }
-
