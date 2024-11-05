@@ -85,5 +85,10 @@ namespace SE_Project.PagesParts
         {
 
         }
+
+        private void AllProjectsPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

@@ -35,10 +35,11 @@
             // 
             this.AllProjectsPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.AllProjectsPanel.Location = new System.Drawing.Point(0, 0);
-            this.AllProjectsPanel.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.AllProjectsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.AllProjectsPanel.Name = "AllProjectsPanel";
             this.AllProjectsPanel.Size = new System.Drawing.Size(892, 478);
             this.AllProjectsPanel.TabIndex = 0;
+            this.AllProjectsPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.AllProjectsPanel_Paint);
             // 
             // AllProjects
             // 

@@ -16,7 +16,7 @@ namespace SE_Project
 
         private void addUserControl(UserControl userControl)
         {
-            userControl.Dock = DockStyle.Fill;
+            userControl.Dock = DockStyle.Top;
             userControl.BringToFront();
             MainPanel.Controls.Clear();
             MainPanel.Controls.Add(userControl);
@@ -63,6 +63,11 @@ namespace SE_Project
                 return true; // Indicate that the key has been handled
             }
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void MainPanel_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

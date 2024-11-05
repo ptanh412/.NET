@@ -1,6 +1,4 @@
-﻿using SE_Project.Pages;
-using SE_Project.Forms;
-using SE_Project.PagesParts;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -15,7 +13,7 @@ namespace SE_Project.Helpers
 {
     class DBHelper
     {
-        static string conString = @"Data Source=DESKTOP-S8VA2O5;Initial Catalog=TaskSphere1;Integrated Security=True;";
+        static string conString = @"Data Source=thanhtruong\SQLEXPRESS;Initial Catalog=TaskManagement;Integrated Security=True;";
         public static bool RegisterUser(string username, string password, string name)
         {
             using (SqlConnection con = new SqlConnection(conString))
@@ -398,6 +396,48 @@ namespace SE_Project.Helpers
                 }
             }
         }
+
+        public static List<TaskModel> GetTasksByProjectId(int projectId)
+        {
+            List<TaskModel> tasks = new List<TaskModel>();
+
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                string query = "SELECT * FROM tasks WHERE project_id = @ProjectId";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@ProjectId", projectId);
+
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tasks.Add(new TaskModel
+                                {
+                                    Id = (int)reader["id"],
+                                    Name = reader["name"].ToString(),
+                                    Description = reader["description"].ToString(),
+                                    Project_id = (int)reader["project_id"],
+                                    Status = reader["status"].ToString(),
+                                    Due_date = (DateTime)reader["due_date"],
+                                    User_id = (int)reader["user_id"]
+                                });
+                            }
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show("Lỗi SQL: " + ex.Message);
+                    }
+                }
+            }
+            return tasks;
+        }
+
 
         //public string InsertRow(string query)
         //{
