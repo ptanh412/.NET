@@ -37,6 +37,9 @@
             this.guna2HtmlLabel4 = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2Elipse1 = new Guna.UI2.WinForms.Guna2Elipse(this.components);
             this.userControl11 = new SE_Project.PagesParts.UserControl1();
+            this.txt_total = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.txt_completed = new Guna.UI2.WinForms.Guna2HtmlLabel();
+            this.txt_inprogress = new Guna.UI2.WinForms.Guna2HtmlLabel();
             this.guna2GradientPanel1.SuspendLayout();
             this.guna2CircleProgressBar1.SuspendLayout();
             this.SuspendLayout();
@@ -127,12 +130,53 @@
             this.userControl11.Name = "userControl11";
             this.userControl11.Size = new System.Drawing.Size(454, 177);
             this.userControl11.TabIndex = 4;
+            this.userControl11.Load += new System.EventHandler(this.userControl11_Load_1);
+            // 
+            // txt_total
+            // 
+            this.txt_total.BackColor = System.Drawing.Color.SpringGreen;
+            this.txt_total.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_total.ForeColor = System.Drawing.Color.Black;
+            this.txt_total.Location = new System.Drawing.Point(326, 299);
+            this.txt_total.Name = "txt_total";
+            this.txt_total.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.txt_total.Size = new System.Drawing.Size(38, 34);
+            this.txt_total.TabIndex = 5;
+            this.txt_total.Text = "3";
+            // 
+            // txt_completed
+            // 
+            this.txt_completed.BackColor = System.Drawing.Color.SpringGreen;
+            this.txt_completed.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_completed.ForeColor = System.Drawing.Color.Black;
+            this.txt_completed.Location = new System.Drawing.Point(326, 408);
+            this.txt_completed.Name = "txt_completed";
+            this.txt_completed.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.txt_completed.Size = new System.Drawing.Size(38, 34);
+            this.txt_completed.TabIndex = 6;
+            this.txt_completed.Text = "3";
+            // 
+            // txt_inprogress
+            // 
+            this.txt_inprogress.BackColor = System.Drawing.Color.SeaGreen;
+            this.txt_inprogress.Font = new System.Drawing.Font("Century Gothic", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txt_inprogress.ForeColor = System.Drawing.Color.Black;
+            this.txt_inprogress.Location = new System.Drawing.Point(326, 354);
+            this.txt_inprogress.Name = "txt_inprogress";
+            this.txt_inprogress.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
+            this.txt_inprogress.Size = new System.Drawing.Size(38, 34);
+            this.txt_inprogress.TabIndex = 7;
+            this.txt_inprogress.Text = "3";
+            this.txt_inprogress.TextAlignment = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // DashBoard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.txt_inprogress);
+            this.Controls.Add(this.txt_completed);
+            this.Controls.Add(this.txt_total);
             this.Controls.Add(this.userControl11);
             this.Controls.Add(this.guna2CircleProgressBar1);
             this.Controls.Add(this.guna2HtmlLabel3);
@@ -159,5 +203,8 @@
         private Guna.UI2.WinForms.Guna2HtmlLabel guna2HtmlLabel4;
         private Guna.UI2.WinForms.Guna2Elipse guna2Elipse1;
         private PagesParts.UserControl1 userControl11;
+        private Guna.UI2.WinForms.Guna2HtmlLabel txt_inprogress;
+        private Guna.UI2.WinForms.Guna2HtmlLabel txt_completed;
+        private Guna.UI2.WinForms.Guna2HtmlLabel txt_total;
     }
 }

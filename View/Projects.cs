@@ -171,6 +171,7 @@ namespace SE_Project
         }
 
         private void guna2Panel1_Paint_1(object sender, PaintEventArgs e)
+        private void projectList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
         }

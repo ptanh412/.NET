@@ -40,7 +40,6 @@ namespace SE_Project.Forms
 
             if (userController.Login(user))
             {
-                MessageBox.Show("Đăng nhập thành công!");
                 this.Hide();
                 new Main().Show();
             }
