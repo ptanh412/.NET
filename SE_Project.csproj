@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Controller\IController.cs" />
     <Compile Include="Controller\ProjectController.cs" />
+    <Compile Include="Controller\TaskController.cs" />
     <Compile Include="Controller\UserController.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\ProjectModel.cs" />
@@ -69,6 +70,12 @@
     </Compile>
     <Compile Include="View\Forms\AddProjects.Designer.cs">
       <DependentUpon>AddProjects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\Forms\AddTasks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\Forms\AddTasks.Designer.cs">
+      <DependentUpon>AddTasks.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Forms\DeleteProjects.cs">
       <SubType>UserControl</SubType>
@@ -154,6 +161,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="View\Forms\AddProjects.resx">
       <DependentUpon>AddProjects.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\Forms\AddTasks.resx">
+      <DependentUpon>AddTasks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\Forms\DeleteProjects.resx">
       <DependentUpon>DeleteProjects.cs</DependentUpon>

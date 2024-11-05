@@ -22,22 +22,26 @@ namespace SE_Project.PagesParts
             InitializeComponent();
             controller = new ProjectController();
         }
-        public string ProjectTitle
+        public string TaskTitle
         {
             get { return CardTitle.Text; }
             set { CardTitle.Text = value; }
         }
-        public string ProjectDesc
+        public string TasktDesc
         {
             get { return CardDesc.Text; }
             set { CardDesc.Text = value; }
         }
-        public string ProjectCre
+        public string TaskAssigned
         {
-            get { return CardCreatedBy.Text; }
-            set { CardCreatedBy.Text = value; }
+            get { return CardAssigned.Text; }
+            set { CardAssigned.Text = value; }
         }
-
+        public string TaskDueDate
+        {
+            get { return CardDueDate.Text; }
+            set { CardDueDate.Text = value; }
+        }
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
@@ -47,23 +51,26 @@ namespace SE_Project.PagesParts
         {
 
         }
-        public void LoadData(ProjectModel project)
+        public void LoadData(TaskModel task)
         {
-            if (project != null)
+            if (task != null)
             {
-                ProjectTitle = project.Name;
-                ProjectDesc = project.Description;
-                ProjectCre = project.User_id.ToString();
+                TaskTitle = task.Name;
+                TasktDesc = task.Description;
+                TaskAssigned = task.Assigned;
+                TaskDueDate = task.Due_date.ToString();
+                guna2ComboBox1.Text = task.Status;
             }
         }
         private void guna2ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("Operation Successful");
+            //MessageBox.Show(guna2ComboBox1.SelectedItem.ToString());
+            //MessageBox.Show("Operation Successful");
         }
 
         private void guna2ImageRadioButton1_CheckedChanged(object sender, EventArgs e)
         {
-            MessageBox.Show("Operation Successful");
+            //MessageBox.Show("Operation Successful");
         }
     }
 }

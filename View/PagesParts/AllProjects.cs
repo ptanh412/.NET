@@ -1,7 +1,10 @@
 ﻿using Guna.UI2.AnimatorNS;
+using Guna.UI2.WinForms;
 using SE_Project.Controller;
+using SE_Project.Forms;
 using SE_Project.Helpers;
 using SE_Project.Model;
+using SE_Project.View.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,30 +19,33 @@ namespace SE_Project.PagesParts
 {
     public partial class AllProjects : UserControl
     {
-        ProjectController projectController;
-        public AllProjects()
+        TaskController taskController;
+        public event EventHandler RequestPanelBack;
+        private int projectId;
+        public AllProjects(int projectId)
         {
             InitializeComponent();
-            projectController = new ProjectController();
+            taskController = new TaskController();
             LoadProjects();
+            this.projectId = projectId;
         }
 
         public string ProjectDesc { get; internal set; }
         public string ProjectTitle { get; internal set; }
         private void LoadProjects()
         {
-            projectController.Load();
+            taskController.Load();
 
-            if (projectController.Items.Count == 0)
+            if (taskController.Items.Count == 0)
             {
                 MessageBox.Show("No projects were loaded.");
                 return;
             }
 
-            foreach (ProjectModel project in projectController.Items)
+            foreach (TaskModel task in taskController.Items)
             {
                 ProjectCard projectCard = new ProjectCard();
-                projectCard.LoadData(project);
+                projectCard.LoadData(task);
                 AllProjectsPanel.Controls.Add(projectCard);
             }
         }
@@ -89,6 +95,29 @@ namespace SE_Project.PagesParts
         private void AllProjectsPanel_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+        private void Add_Project_RequestPanelBack(object sender, EventArgs e)
+        {
+            // Logic to send panel2 to the back
+            panel1.SendToBack();
+        }
+        private void addUserControl2(UserControl userControl)
+        {
+            panel1.Controls.Clear(); // Clear existing controls
+            panel1.Controls.Add(userControl); // Add the new user control
+            userControl.Dock = DockStyle.Fill;
+            userControl.BringToFront(); // Ensure the user control is at the front of panel2
+            panel1.BringToFront();  // This will bring the panel2 to the front, ensuring visibility
+        }
+
+
+        private void btn_AddTask_Click(object sender, EventArgs e)
+        {
+
+           
+            AddTasks addProjects = new AddTasks(projectId);
+            addUserControl2(addProjects);
+            //addProjects.RequestPanelBack += Add_Project_RequestPanelBack;
         }
     }
 }
