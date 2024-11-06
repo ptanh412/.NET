@@ -14,10 +14,10 @@ using System.Windows.Forms;
 
 namespace SE_Project.PagesParts
 {
-    public partial class ProjectCard : UserControl
+    public partial class TaskCard : UserControl
     {
         ProjectController controller;
-        public ProjectCard()
+        public TaskCard()
         {
             InitializeComponent();
             controller = new ProjectController();

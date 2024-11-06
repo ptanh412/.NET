@@ -12,14 +12,27 @@ using System.Windows.Forms;
 
 namespace SE_Project.View.Forms
 {
-    public partial class AddTasks : UserControl
+    public partial class AddTasks : Form
     {
         TaskController taskController = new TaskController();
         private int projectId;
+        public event EventHandler TaskAdded;
         public AddTasks(int projectId)
         {
             InitializeComponent();
             this.projectId = projectId;
+            this.taskController = new TaskController();
+            this.Text = "Add New Task";
+            this.Size = new Size(400, 600);
+
+            // Kiểm tra project tồn tại
+            if (!taskController.IsProjectExists(projectId))
+            {
+                MessageBox.Show("Invalid project selected!", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Enabled = false;
+                return;
+            }
         }
 
         private void guna2HtmlLabel2_Click(object sender, EventArgs e)
@@ -74,11 +87,16 @@ namespace SE_Project.View.Forms
 
         private void guna2GradientButton1_Click(object sender, EventArgs e)
         {
-
             try
             {
-                MessageBox.Show(projectId.ToString());
-                var project = new TaskModel
+                if (string.IsNullOrWhiteSpace(guna2TextBox1.Text))
+                {
+                    MessageBox.Show("Task name is required!", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var task = new TaskModel
                 {
                     Name = guna2TextBox1.Text,
                     Description = guna2TextBox2.Text,
@@ -87,21 +105,33 @@ namespace SE_Project.View.Forms
                     Status = "todo",
                     Due_date = dateTimePicker1.Value,
                     Project_id = projectId
-                }; 
-                bool isSuccessful = taskController.Create(project);
-                if (isSuccessful)
+                };
+
+                if (taskController.Create(task))
                 {
-                    MessageBox.Show("Project added successfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Task added successfully!", "Success",
+                        MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    TaskAdded?.Invoke(this, EventArgs.Empty);
+
+                    guna2TextBox1.Clear();
+                    guna2TextBox2.Clear();
+                    dateTimePicker1.Value = DateTime.Now;
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
                 else
                 {
-                    MessageBox.Show("An error occurred", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show("Failed to add task!", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
     }
 }

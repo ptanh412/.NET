@@ -24,14 +24,26 @@ namespace SE_Project
         public Projects()
         {
             InitializeComponent();
-            AllProjects project_1 = new AllProjects(selectedRow);
+            AllTask project_1 = new AllTask(selectedRow);
             projectController = new ProjectController();
             addUserControl(project_1);
             projectController.Load();
             LoadProjects();
             projectList.SelectionChanged += projectList_SelectionChanged;
-
             projectList.CellClick += projectList_CellClick;
+            UpdateTaskView();
+        }
+        public int GetSelectedProjectId()
+        {
+            return selectedRow;
+        }
+        private void UpdateTaskView()
+        {
+            if (selectedRow != -1)
+            {
+                AllTask projectTasks = new AllTask(selectedRow);
+                addUserControl(projectTasks);
+            }
         }
         private bool IsRowValid(DataGridViewRow row)
         {
@@ -41,28 +53,73 @@ namespace SE_Project
         }
         private void projectList_SelectionChanged(object sender, EventArgs e)
         {
-            if (projectList.SelectedRows.Count == 0)
+            if (projectList.SelectedRows.Count > 0)
             {
-                lastSelectedRow = -1;
+                DataGridViewRow row = projectList.SelectedRows[0];
+                if (IsRowValid(row))
+                {
+                    selectedRow = Convert.ToInt32(row.Cells["Id"].Value);
+                    UpdateTaskView();
+                }
             }
         }
         private void projectList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0 || e.RowIndex >= projectList.Rows.Count) return;
-            DataGridViewRow row = projectList.Rows[e.RowIndex];
-            if (!IsRowValid(row)) return;
+            if (e.RowIndex >= 0 && e.RowIndex < projectList.Rows.Count)
+            {
+                DataGridViewRow row = projectList.Rows[e.RowIndex];
+                if (IsRowValid(row))
+                {
+                    selectedRow = Convert.ToInt32(row.Cells["Id"].Value);
+                    UpdateTaskView();
+                }
+            }
+        }
+        private void guna2Button5_Click_1(object sender, EventArgs e)
+        {
+            // Kiểm tra nếu có hàng nào đang được chọn
+            if (selectedRow == -1)
+            {
+                MessageBox.Show("Please select a project to delete.");
+                return;
+            }
 
-            selectedRow = (int)row.Cells["Id"].Value;
-            ProjectModel project = projectController.Items
-                .Cast<ProjectModel>()
-                .FirstOrDefault(p => p.Id == selectedRow);
+            // Xác nhận xóa với người dùng
+            DialogResult result = MessageBox.Show("Are you sure you want to delete this project?",
+                                                  "Confirmation",
+                                                  MessageBoxButtons.YesNo,
+                                                  MessageBoxIcon.Warning);
 
-            if (project == null) return;
+            if (result == DialogResult.Yes)
+            {
+                // Gọi ProjectController để xóa project khỏi cơ sở dữ liệu
+                bool deleteSuccess = projectController.Delete(selectedRow);
 
-            // Set the data to the textboxes
-            //guna2TextBox1.Text = project.Name;
-            //guna2TextBox2.Text = project.Description;
-        }       
+                if (deleteSuccess)
+                {
+                    // Tìm và xóa hàng khỏi projectList
+                    foreach (DataGridViewRow row in projectList.Rows)
+                    {
+                        if (Convert.ToInt32(row.Cells["Id"].Value) == selectedRow)
+                        {
+                            projectList.Rows.Remove(row);
+                            break;
+                        }
+                    }
+
+                    // Đặt lại selectedRow và cập nhật view
+                    selectedRow = -1;
+                    UpdateTaskView();
+                    MessageBox.Show("Project deleted successfully.");
+                }
+                else
+                {
+                    MessageBox.Show("Failed to delete project. Please try again.");
+                }
+            }
+        }
+
+
         private void addUserControl(UserControl userControl)
         {
             userControl.Dock = DockStyle.Fill;
@@ -93,6 +150,7 @@ namespace SE_Project
             }
 
             projectList.ClearSelection();
+            selectedRow = -1;
         }
 
 
@@ -104,7 +162,7 @@ namespace SE_Project
 
         private void guna2Button1_Click(object sender, EventArgs e)
         {
-            AllProjects allProjects = new AllProjects(selectedRow);
+            AllTask allProjects = new AllTask(selectedRow);
             addUserControl(allProjects);
         }
 
@@ -131,7 +189,6 @@ namespace SE_Project
 
         private void Add_Project_RequestPanelBack(object sender, EventArgs e)
         {
-            // Logic to send panel2 to the back
             guna2Panel2.SendToBack();
         }
         private void guna2Button4_Click(object sender, EventArgs e)
@@ -174,5 +231,7 @@ namespace SE_Project
         {
 
         }
+
+
     }
 }

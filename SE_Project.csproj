@@ -72,7 +72,7 @@
       <DependentUpon>AddProjects.cs</DependentUpon>
     </Compile>
     <Compile Include="View\Forms\AddTasks.cs">
-      <SubType>UserControl</SubType>
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="View\Forms\AddTasks.Designer.cs">
       <DependentUpon>AddTasks.cs</DependentUpon>
@@ -103,17 +103,17 @@
     <Compile Include="View\Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\PagesParts\ProjectCard.cs">
+    <Compile Include="View\PagesParts\TaskCard.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\PagesParts\ProjectCard.Designer.cs">
-      <DependentUpon>ProjectCard.cs</DependentUpon>
+    <Compile Include="View\PagesParts\TaskCard.Designer.cs">
+      <DependentUpon>TaskCard.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\PagesParts\AllProjects.cs">
+    <Compile Include="View\PagesParts\AllTask.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="View\PagesParts\AllProjects.Designer.cs">
-      <DependentUpon>AllProjects.cs</DependentUpon>
+    <Compile Include="View\PagesParts\AllTask.Designer.cs">
+      <DependentUpon>AllTask.cs</DependentUpon>
     </Compile>
     <Compile Include="View\PagesParts\ProjectsCompleted.cs">
       <SubType>UserControl</SubType>
@@ -177,11 +177,11 @@
     <EmbeddedResource Include="View\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\PagesParts\ProjectCard.resx">
-      <DependentUpon>ProjectCard.cs</DependentUpon>
+    <EmbeddedResource Include="View\PagesParts\TaskCard.resx">
+      <DependentUpon>TaskCard.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="View\PagesParts\AllProjects.resx">
-      <DependentUpon>AllProjects.cs</DependentUpon>
+    <EmbeddedResource Include="View\PagesParts\AllTask.resx">
+      <DependentUpon>AllTask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\PagesParts\ProjectsCompleted.resx">
       <DependentUpon>ProjectsCompleted.cs</DependentUpon>
