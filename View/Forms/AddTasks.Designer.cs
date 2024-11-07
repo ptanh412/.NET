@@ -224,11 +224,7 @@
             this.guna2ComboBox1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.guna2ComboBox1.ForeColor = System.Drawing.Color.Black;
             this.guna2ComboBox1.ItemHeight = 30;
-            this.guna2ComboBox1.Items.AddRange(new object[] {
-            "Todo",
-            "In Progress",
-            "Completed"});
-            this.guna2ComboBox1.Location = new System.Drawing.Point(250, 465);
+            this.guna2ComboBox1.Location = new System.Drawing.Point(251, 455);
             this.guna2ComboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2ComboBox1.Name = "guna2ComboBox1";
             this.guna2ComboBox1.Size = new System.Drawing.Size(158, 36);

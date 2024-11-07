@@ -16,5 +16,7 @@ namespace SE_Project.Model
         public string Status { get; set; } // Trạng thái của task (todo, inprogress, completed, starred)
         public DateTime Due_date { get; set; } // Ngày hết hạn của task
         public DateTime CreatedAt { get; set; } // Ngày tạo task
+        public string ProjectName  { get; set; } // Dự án liên quan
+        public string Assigned { get; set; } // User liên quan
     }
 }

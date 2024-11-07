@@ -26,7 +26,7 @@ namespace SE_Project.PagesParts
         {
             InitializeComponent();
             taskController = new TaskController();
-            LoadProjects();
+            //LoadTask();
             LoadTasksForProject();
             this.projectId = projectId;
             AllProjectsPanel.BringToFront();
@@ -40,10 +40,10 @@ namespace SE_Project.PagesParts
             {
                 AllProjectsPanel.Controls.Clear();
 
-                // Sửa lại phương thức Load để chỉ lấy task của project hiện tại
-                var tasks = DBHelper.GetTasksByProjectId(projectId);
+                // Sử dụng TaskController để load tasks
+                taskController.Load(projectId);
 
-                if (tasks == null || tasks.Count == 0)
+                if (taskController.Items.Count == 0)
                 {
                     Label noTasksLabel = new Label
                     {
@@ -56,7 +56,8 @@ namespace SE_Project.PagesParts
                     return;
                 }
 
-                foreach (TaskModel task in tasks)
+                // Thêm các task vào AllProjectsPanel
+                foreach (TaskModel task in taskController.Items)
                 {
                     TaskCard taskCard = new TaskCard();
                     taskCard.LoadData(task);
@@ -69,29 +70,30 @@ namespace SE_Project.PagesParts
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void LoadProjects()
-        {
-            taskController.Load();
 
-            if (taskController.Items.Count == 0)
-            {
-                MessageBox.Show("No projects were loaded.");
-                return;
-            }
+        //private void LoadTask()
+        //{
+        //    taskController.Load();
 
-            foreach (TaskModel task in taskController.Items)
-            {
-                TaskCard projectCard = new TaskCard();
-                projectCard.LoadData(task);
-                AllProjectsPanel.Controls.Add(projectCard);
-            }
-        }
+        //    //if (taskController.Items.Count == 0)
+        //    //{
+        //    //    MessageBox.Show("No projects were loaded.");
+        //    //    return;
+        //    //}
+
+        //    foreach (TaskModel task in taskController.Items)
+        //    {
+        //        TaskCard projectCard = new TaskCard();
+        //        projectCard.LoadData(task);
+        //        AllProjectsPanel.Controls.Add(projectCard);
+        //    }
+        //}
 
 
         private void AllProjects_Load(object sender, EventArgs e)
         {
             AllProjectsPanel.Controls.Clear();
-            LoadProjects();
+            LoadTasksForProject();
         }
 
         private void PanelProjectsAll_Paint(object sender, PaintEventArgs e)
@@ -135,7 +137,6 @@ namespace SE_Project.PagesParts
         }
         private void Add_Project_RequestPanelBack(object sender, EventArgs e)
         {
-            // Logic to send panel2 to the back
         }
         private void addUserControl2(UserControl userControl)
         {
@@ -145,36 +146,30 @@ namespace SE_Project.PagesParts
         }
 
 
-        //private void addFormControl(Form formControl)
-        //{
-        //    formControl.TopLevel = false; // Set form as non-top level
-        //    formControl.FormBorderStyle = FormBorderStyle.None; // Remove form border
-        //    formControl.Dock = DockStyle.Fill; // Dock form to fill panel
-        //    formControl.Show(); // Show form
-        //}
-
         private void btn_AddTask_Click(object sender, EventArgs e)
         {
+            MessageBox.Show(projectId.ToString());
             if (projectId <= 0)
             {
                 MessageBox.Show("Invalid project selected", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+            
 
             try
-            {
+            {                
                 // Tạo instance của AddTasks form
                 AddTasks addTaskForm = new AddTasks(projectId)
                 {
                     StartPosition = FormStartPosition.CenterScreen,
                     TopLevel = true,
-                    FormBorderStyle = FormBorderStyle.FixedDialog, // hoặc FormBorderStyle style khác tùy bạn
+                    FormBorderStyle = FormBorderStyle.FixedDialog,
                     MaximizeBox = false,
                     MinimizeBox = false
                 };
 
-                // Đăng ký event handler
+                //// Đăng ký event handler
                 addTaskForm.TaskAdded += OnTaskAdded;
 
                 // Xử lý khi form đóng
