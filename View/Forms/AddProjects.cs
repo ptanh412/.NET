@@ -90,5 +90,10 @@ namespace SE_Project.Forms
         {
 
         }
+
+        private void guna2ImageButton1_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }

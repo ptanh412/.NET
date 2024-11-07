@@ -32,6 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddProjects));
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.guna2ImageButton1 = new Guna.UI2.WinForms.Guna2ImageButton();
+            this.TaskSphere = new System.Windows.Forms.Label();
             this.guna2AnimateWindow1 = new Guna.UI2.WinForms.Guna2AnimateWindow(this.components);
             this.guna2GradientButton1 = new Guna.UI2.WinForms.Guna2GradientButton();
             this.guna2TextBox2 = new Guna.UI2.WinForms.Guna2TextBox();
@@ -51,6 +52,7 @@
             this.guna2Panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.guna2Panel1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(118)))), ((int)(((byte)(212)))));
             this.guna2Panel1.Location = new System.Drawing.Point(0, 0);
+            this.guna2Panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.guna2Panel1.Name = "guna2Panel1";
             this.guna2Panel1.Size = new System.Drawing.Size(318, 66);
             this.guna2Panel1.TabIndex = 0;
@@ -69,6 +71,20 @@
             this.guna2ImageButton1.PressedState.ImageSize = new System.Drawing.Size(30, 30);
             this.guna2ImageButton1.Size = new System.Drawing.Size(47, 44);
             this.guna2ImageButton1.TabIndex = 2;
+            this.guna2ImageButton1.Click += new System.EventHandler(this.guna2ImageButton1_Click_1);
+            // 
+            // TaskSphere
+            // 
+            this.TaskSphere.AutoSize = true;
+            this.TaskSphere.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(118)))), ((int)(((byte)(212)))));
+            this.TaskSphere.Font = new System.Drawing.Font("Century Gothic", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TaskSphere.ForeColor = System.Drawing.Color.White;
+            this.TaskSphere.Location = new System.Drawing.Point(81, 23);
+            this.TaskSphere.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.TaskSphere.Name = "TaskSphere";
+            this.TaskSphere.Size = new System.Drawing.Size(256, 32);
+            this.TaskSphere.TabIndex = 1;
+            this.TaskSphere.Text = "Task Management";
             // 
             // guna2GradientButton1
             // 
@@ -188,6 +204,7 @@
             this.Controls.Add(this.guna2HtmlLabel3);
             this.Controls.Add(this.guna2HtmlLabel2);
             this.Controls.Add(this.guna2Panel1);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AddProjects";
             this.Size = new System.Drawing.Size(318, 427);
             this.Load += new System.EventHandler(this.AddProjects_Load);

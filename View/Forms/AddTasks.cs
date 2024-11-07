@@ -25,14 +25,7 @@ namespace SE_Project.View.Forms
             this.Text = "Add New Task";
             this.Size = new Size(400, 600);
 
-            // Kiểm tra project tồn tại
-            if (!taskController.IsProjectExists(projectId))
-            {
-                MessageBox.Show("Invalid project selected!", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                this.Enabled = false;
-                return;
-            }
+            
         }
 
         private void guna2HtmlLabel2_Click(object sender, EventArgs e)
@@ -87,6 +80,7 @@ namespace SE_Project.View.Forms
 
         private void guna2GradientButton1_Click(object sender, EventArgs e)
         {
+
             try
             {
                 if (string.IsNullOrWhiteSpace(guna2TextBox1.Text))
@@ -105,7 +99,7 @@ namespace SE_Project.View.Forms
                     Status = "todo",
                     Due_date = dateTimePicker1.Value,
                     Project_id = projectId
-                };
+                }; 
 
                 if (taskController.Create(task))
                 {

@@ -28,26 +28,11 @@ namespace SE_Project.Controller
         {
             var task = model as TaskModel;
             if (task == null) return false;
-
-            // Kiểm tra project_id có tồn tại trước khi tạo task
-            if (!IsProjectExists(task.Project_id))
-            {
-                return false;
-            }
-
-            bool result = DBHelper.CreateTask(
-                task.Name,
-                task.Description,
-                task.Project_id,
-                task.Status,
-                task.Due_date,
-                task.User_id
-            );
-
+            bool result = DBHelper.CreateTask(task.Name, task.Description, task.Project_id, task.Status, task.Due_date, task.User_id );
             if (result) items.Add(task);
             return result;
         }
-            public bool Delete(IModel model)
+        public bool Delete(IModel model)
         {
             return true;
         }
@@ -61,6 +46,7 @@ namespace SE_Project.Controller
             return result;
         }
 
+        // Sử dụng hàm GetTasksByProjectId ở đây
         public bool Load()
         {
             items.Clear();
@@ -79,6 +65,7 @@ namespace SE_Project.Controller
                     }
                 }
             }
+
             return true;
         }
 
@@ -97,9 +84,15 @@ namespace SE_Project.Controller
             //    }
             //}
 
+            // Thêm tất cả các task vào danh sách items
+            foreach (var task in tasks)
+            {
+                items.Add((IModel)task);
+            }
 
             return true;
         }
+
 
         public IModel Read(object id)
         {

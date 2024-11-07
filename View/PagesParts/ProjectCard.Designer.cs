@@ -1,6 +1,6 @@
 ﻿namespace SE_Project.PagesParts
 {
-    partial class TaskCard
+    partial class ProjectCard
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,18 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskCard));
-            this.guna2ImageRadioButton1 = new Guna.UI2.WinForms.Guna2ImageRadioButton();
-            this.CardTaskTitle = new System.Windows.Forms.Label();
-            this.CardTaskDeadline = new System.Windows.Forms.TextBox();
-            this.labCardTaskDeadline = new System.Windows.Forms.Label();
-            this.CardTaskAssigned = new System.Windows.Forms.TextBox();
-            this.labCardAssigned = new System.Windows.Forms.Label();
-            this.CardTaskDescription = new System.Windows.Forms.TextBox();
-            this.cbCardTaskStatus = new Guna.UI2.WinForms.Guna2ComboBox();
-            this.labCardTaskStatus = new System.Windows.Forms.Label();
-            this.labCardTaskDescription = new System.Windows.Forms.Label();
-            this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectCard));
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.CardDueDate = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -74,6 +63,7 @@
             this.guna2Panel1.Name = "guna2Panel1";
             this.guna2Panel1.Size = new System.Drawing.Size(253, 347);
             this.guna2Panel1.TabIndex = 0;
+            this.guna2Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.guna2Panel1_Paint);
             // 
             // CardDueDate
             // 
@@ -86,6 +76,7 @@
             this.CardDueDate.Size = new System.Drawing.Size(245, 37);
             this.CardDueDate.TabIndex = 9;
             this.CardDueDate.Text = "Project Management System";
+            this.CardDueDate.TextChanged += new System.EventHandler(this.CardDueDate_TextChanged);
             // 
             // label4
             // 
@@ -98,6 +89,7 @@
             this.label4.Size = new System.Drawing.Size(83, 19);
             this.label4.TabIndex = 8;
             this.label4.Text = "Deadline";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // CardAssigned
             // 
@@ -110,6 +102,7 @@
             this.CardAssigned.Size = new System.Drawing.Size(245, 37);
             this.CardAssigned.TabIndex = 7;
             this.CardAssigned.Text = "Project Management System";
+            this.CardAssigned.TextChanged += new System.EventHandler(this.CardAssigned_TextChanged);
             // 
             // label1
             // 
@@ -122,6 +115,7 @@
             this.label1.Size = new System.Drawing.Size(110, 19);
             this.label1.TabIndex = 6;
             this.label1.Text = "Assigned By";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // CardDesc
             // 
@@ -170,6 +164,7 @@
             this.label3.Size = new System.Drawing.Size(64, 23);
             this.label3.TabIndex = 3;
             this.label3.Text = "Status";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label2
             // 
@@ -182,6 +177,7 @@
             this.label2.Size = new System.Drawing.Size(100, 19);
             this.label2.TabIndex = 1;
             this.label2.Text = "Description";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // guna2Panel2
             // 
@@ -195,6 +191,7 @@
             this.guna2Panel2.Name = "guna2Panel2";
             this.guna2Panel2.Size = new System.Drawing.Size(253, 39);
             this.guna2Panel2.TabIndex = 0;
+            this.guna2Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.guna2Panel2_Paint);
             // 
             // guna2ImageRadioButton1
             // 
@@ -220,6 +217,7 @@
             this.CardTitle.Size = new System.Drawing.Size(50, 23);
             this.CardTitle.TabIndex = 0;
             this.CardTitle.Text = "Task";
+            this.CardTitle.Click += new System.EventHandler(this.CardTitle_Click);
             // 
             // ProjectCard
             // 
@@ -235,8 +233,6 @@
             this.guna2Panel1.PerformLayout();
             this.guna2Panel2.ResumeLayout(false);
             this.guna2Panel2.PerformLayout();
-            this.guna2Panel1.ResumeLayout(false);
-            this.guna2Panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
