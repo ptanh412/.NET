@@ -15,6 +15,7 @@ namespace SE_Project.Helpers
 {
     class DBHelper
     {
+        //DB context
         static string conString = @"Data Source=DESKTOP-S8VA2O5;Initial Catalog=TaskSphere1;Integrated Security=True;";
         public static bool RegisterUser(string username, string password, string name)
         {
