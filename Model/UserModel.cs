@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SE_Project.Model
 {
-    internal class UserModel : IModel
+    public class UserModel : IModel
     {
         public string username;
         public string Username

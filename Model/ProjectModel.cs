@@ -1,93 +1,30 @@
-﻿using System;
+﻿using SE_Project.Model;
 using System.Collections.Generic;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SE_Project.Model
+public class ProjectModel : IModel
 {
-    public class ProjectModel : IModel
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public int CreatedBy { get; set; }
+    public string CreatorName { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public List<UserModel> Participants { get; set; }
+    public List<TaskModel> Tasks { get; set; }
+
+    public ProjectModel()
     {
-        public int id;
-        public int Id
-        {
-            get
-            {
-                return this.id;
-            }
-            set
-            {
-                this.id = value;
-            }
-        }
-        public string name;
-        public string Name
-        {
-            get
-            {
-                return this.name;
-            }
-            set
-            {
-                this.name = value;
-            }
-        }
-        public string description;
-        public string Description
-        {
-            get
-            {
-                return this.description;
-            }
-            set
-            {
-                this.description = value;
-            }
-        }
-        public int user_id;
-        public int User_id
-        {
-            get
-            {
-                return this.user_id;
-            }
-            set
-            {
-                this.user_id = value;
-            }
-        }
-        public string project_id;
-        public string Project_id
-        {
-            get
-            {
-                return this.project_id;
-            }
-            set
-            {
-                this.project_id = value;
-            }
-        }
-        public string created_by;
-        public string Created_by
-        {
-            get
-            {
-                return this.created_by;
-            }
-            set
-            {
-                this.created_by = value;
-            }
-        }
-        public ProjectModel()
-        {
-        }
-        public ProjectModel(string name, string description, int user_id)
-        {
-            this.name = name;
-            this.description = description;
-            this.user_id = user_id;
-        }   
+        Participants = new List<UserModel>();
+        Tasks = new List<TaskModel>();
     }
+    public string ParticipantsNames
+    {
+        get
+        {
+            return Participants != null ? string.Join(", ", Participants.Select(p => p.Name)) : "";
+        }
+    }
+
 }

@@ -229,7 +229,7 @@
             this.guna2Panel2.Location = new System.Drawing.Point(373, 34);
             this.guna2Panel2.Margin = new System.Windows.Forms.Padding(4);
             this.guna2Panel2.Name = "guna2Panel2";
-            this.guna2Panel2.Size = new System.Drawing.Size(424, 526);
+            this.guna2Panel2.Size = new System.Drawing.Size(444, 900);
             this.guna2Panel2.TabIndex = 7;
             // 
             // Projects

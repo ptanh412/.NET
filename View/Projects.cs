@@ -48,8 +48,8 @@ namespace SE_Project
         private bool IsRowValid(DataGridViewRow row)
         {
             return row != null &&
-                   row.Cells["Id"].Value != null &&
-                   !string.IsNullOrWhiteSpace(row.Cells["Id"].Value.ToString());
+                   row.Cells["ID"].Value != null &&
+                   !string.IsNullOrWhiteSpace(row.Cells["ID"].Value.ToString());
         }
         private void projectList_SelectionChanged(object sender, EventArgs e)
         {
@@ -58,7 +58,7 @@ namespace SE_Project
                 DataGridViewRow row = projectList.SelectedRows[0];
                 if (IsRowValid(row))
                 {
-                    selectedRow = Convert.ToInt32(row.Cells["Id"].Value);
+                    selectedRow = Convert.ToInt32(row.Cells["ID"].Value);
                     UpdateTaskView();
                 }
             }
@@ -70,11 +70,12 @@ namespace SE_Project
                 DataGridViewRow row = projectList.Rows[e.RowIndex];
                 if (IsRowValid(row))
                 {
-                    selectedRow = Convert.ToInt32(row.Cells["Id"].Value);
+                    selectedRow = Convert.ToInt32(row.Cells["ID"].Value);
                     UpdateTaskView();
                 }
             }
         }
+
         private void guna2Button5_Click_1(object sender, EventArgs e)
         {
             // Kiểm tra nếu có hàng nào đang được chọn
@@ -100,14 +101,13 @@ namespace SE_Project
                     // Tìm và xóa hàng khỏi projectList
                     foreach (DataGridViewRow row in projectList.Rows)
                     {
-                        if (Convert.ToInt32(row.Cells["Id"].Value) == selectedRow)
+                        if (Convert.ToInt32(row.Cells["ID"].Value) == selectedRow)
                         {
                             projectList.Rows.Remove(row);
                             break;
                         }
                     }
 
-                    // Đặt lại selectedRow và cập nhật view
                     selectedRow = -1;
                     UpdateTaskView();
                     MessageBox.Show("Project deleted successfully.");
@@ -129,7 +129,7 @@ namespace SE_Project
 
         }
 
-        private void LoadProjects()
+        public void LoadProjects()
         {
             var projects = ((IController)projectController).Items
                                 .Cast<ProjectModel>()
@@ -138,15 +138,24 @@ namespace SE_Project
             projectList.RowTemplate.Height = 30;
 
             projectList.DataSource = null;
-
-            projectList.DataSource = projects;
+            projectList.DataSource = projects.Select(p => new
+            {
+                p.Id,
+                p.Name,
+                p.Description,
+                p.CreatedAt,
+                p.CreatorName,
+                ParticipantsNames = string.Join(", ", p.Participants.Select(pt => pt.Name))
+            }).ToList();
 
             if (projectList.Columns.Count > 0)
             {
-                projectList.Columns["Id"].HeaderText = "ID";
+                projectList.Columns["ID"].HeaderText = "ID";
                 projectList.Columns["Name"].HeaderText = "Project Name";
                 projectList.Columns["Description"].HeaderText = "Description";
-                projectList.Columns["User_id"].HeaderText = "User ID";
+                projectList.Columns["CreatedAt"].HeaderText = "Created At";
+                projectList.Columns["CreatorName"].HeaderText = "Creator Name";
+                projectList.Columns["ParticipantsNames"].HeaderText = "Participants";
             }
 
             projectList.ClearSelection();

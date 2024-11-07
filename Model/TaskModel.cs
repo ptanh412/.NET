@@ -80,6 +80,7 @@ namespace SE_Project.Model
             get { return this.assigned; }
             set { this.assigned = value; }
         }
+        public string ProjectName { get; set; } 
         public TaskModel(string name, string description, int project_id, int user_id, string status, DateTime due_date)
         {
             this.name = name;

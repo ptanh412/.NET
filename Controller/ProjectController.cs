@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 using SE_Project.Helpers;
 using SE_Project.Model;
 
@@ -10,97 +9,147 @@ namespace SE_Project.Controller
 {
     internal class ProjectController : IController
     {
+        private List<IModel> items;
+
         public ProjectController()
         {
-            items = new List<IModel>(); // Khởi tạo danh sách ở đây
+            items = new List<IModel>(); // Khởi tạo danh sách dự án
         }
-        private List<IModel> items;
+
         public List<IModel> Items
         {
-            get
-            {
-                return this.items;
-            }
-
+            get { return items; }
         }
 
         public bool Create(IModel model)
         {
-            var project = model as ProjectModel;
-            if (project == null) return false;
-            bool result = DBHelper.CreateProject(project.Name, project.Description, project.User_id);
-            if (result) items.Add(project);
+            if (model is ProjectModel project)
+            {
+                try
+                {
+                    // Tạo project và thêm người tham gia
+                    int projectId = DBHelper.CreateProject(
+                        project.Name,
+                        project.Description,
+                        project.CreatedBy,
+                        project.Participants?.Select(p => p.ID).ToList()
+                    );
 
-            return result;
+                    if (projectId > 0)
+                    {
+                        project.Id = projectId;
+                        items.Add(project);
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log error
+                    MessageBox.Show("Lỗi khi tạo dự án: " + ex.Message);
+                }
+            }
+            return false;
         }
         public bool Delete(IModel model)
         {
-            return true;
+            if (model is ProjectModel project)
+            {
+                return Delete(project.Id);
+            }
+            return false;
         }
 
         public bool Delete(object id)
         {
-            if (id == null) return false;
+            //if (id == null) return false;
 
-            bool result = DBHelper.DeleteProject((int)id);
-            if (result) items.RemoveAll(p => ((ProjectModel)p).Id == (int)id);
-            return result;
+            //bool result = DBHelper.DeleteProject((int)id);
+            //if (result)
+            //{
+            //    items.RemoveAll(p => ((ProjectModel)p).Id == (int)id);
+            //}
+            return false;
         }
 
         public bool Load()
         {
-            items.Clear();
-            List<ProjectModel> projects = DBHelper.GetProjects();
-
-            if (projects == null) return false;
-
-            foreach (var project in projects)
+            try
             {
-                // Lấy thông tin dự án cùng với tên người dùng
-                var fullProject = DBHelper.GetProjectWithUserNameById(project.Id);
-                if (fullProject != null)
+                var projects = DBHelper.GetAllProjects();
+                if (projects != null)
                 {
-                    items.Add(fullProject); // Thêm dự án đã có tên người dùng vào danh sách
+                    items.Clear();
+                    items.AddRange(projects);
+                    return true;
                 }
             }
-            return true;
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải danh sách dự án: " + ex.Message);
+            }
+            return false;
         }
 
         public bool Load(object id)
         {
-            return true;
+            if (id == null) return false;
+
+            try
+            {
+                var project = DBHelper.GetProjectById((int)id);
+                if (project != null)
+                {
+                    items.Clear();
+                    items.Add(project);
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi tải thông tin dự án: " + ex.Message);
+            }
+            return false;
         }
 
         public IModel Read(object id)
         {
-            if (id == null) return null;
+            //if (id == null) return null;
 
-            ProjectModel project = DBHelper.GetProjectWithUserNameById((int)id);
-            return project;
+            //// Lấy dự án cùng với danh sách người dùng liên kết
+            //return DBHelper.GetProjectWithUsersById((int)id;
+            return null;
         }
 
         public bool Update(IModel model)
         {
-            var project = model as ProjectModel;
-            if (project == null) return false;
-
-            bool result = DBHelper.UpdateProject(project.Id, project.Name, project.Description, project.User_id);
-            if (result)
-            {
-                int index = items.FindIndex(p => ((ProjectModel)p).Id == project.Id);
-                if (index >= 0) items[index] = project;
-            }
-
-            return result;
+            //if (model is ProjectModel project)
+            //{
+            //    bool result = DBHelper.UpdateProject(project.Id, project.Name, project.Description);
+            //    if (result)
+            //    {
+            //        int index = items.FindIndex(p => ((ProjectModel)p).Id == project.Id);
+            //        if (index >= 0)
+            //        {
+            //            items[index] = project;
+            //        }
+            //    }
+            //    return result;
+            //}
+            return false;
         }
-        public bool IsExist(Object id)
+
+        public bool IsExist(object id)
         {
-            return true;
+            return items.Exists(p => ((ProjectModel)p).Id == (int)id);
         }
+
         public bool IsExist(IModel model)
         {
-            return true;
+            if (model is ProjectModel project)
+            {
+                return items.Exists(p => ((ProjectModel)p).Id == project.Id);
+            }
+            return false;
         }
     }
 }
-
