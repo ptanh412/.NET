@@ -133,6 +133,12 @@
     <Compile Include="View\PagesParts\Starred.Designer.cs">
       <DependentUpon>Starred.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\PagesParts\TaskCard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\PagesParts\TaskCard.Designer.cs">
+      <DependentUpon>TaskCard.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\PagesParts\ToDo.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -191,6 +197,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="View\PagesParts\Starred.resx">
       <DependentUpon>Starred.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\PagesParts\TaskCard.resx">
+      <DependentUpon>TaskCard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\PagesParts\ToDo.resx">
       <DependentUpon>ToDo.cs</DependentUpon>

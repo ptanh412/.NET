@@ -29,7 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddTasks));
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
+            this.guna2ImageButton1 = new Guna.UI2.WinForms.Guna2ImageButton();
             this.TaskSphere = new System.Windows.Forms.Label();
             this.guna2AnimateWindow1 = new Guna.UI2.WinForms.Guna2AnimateWindow(this.components);
             this.guna2GradientButton1 = new Guna.UI2.WinForms.Guna2GradientButton();
@@ -48,6 +50,7 @@
             // guna2Panel1
             // 
             this.guna2Panel1.BackColor = System.Drawing.Color.Beige;
+            this.guna2Panel1.Controls.Add(this.guna2ImageButton1);
             this.guna2Panel1.Controls.Add(this.TaskSphere);
             this.guna2Panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.guna2Panel1.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(118)))), ((int)(((byte)(212)))));
@@ -56,6 +59,22 @@
             this.guna2Panel1.Name = "guna2Panel1";
             this.guna2Panel1.Size = new System.Drawing.Size(594, 81);
             this.guna2Panel1.TabIndex = 14;
+            // 
+            // guna2ImageButton1
+            // 
+            this.guna2ImageButton1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(118)))), ((int)(((byte)(212)))));
+            this.guna2ImageButton1.CheckedState.ImageSize = new System.Drawing.Size(64, 64);
+            this.guna2ImageButton1.HoverState.ImageSize = new System.Drawing.Size(30, 30);
+            this.guna2ImageButton1.Image = ((System.Drawing.Image)(resources.GetObject("guna2ImageButton1.Image")));
+            this.guna2ImageButton1.ImageOffset = new System.Drawing.Point(0, 0);
+            this.guna2ImageButton1.ImageRotate = 0F;
+            this.guna2ImageButton1.ImageSize = new System.Drawing.Size(30, 30);
+            this.guna2ImageButton1.Location = new System.Drawing.Point(357, 0);
+            this.guna2ImageButton1.Margin = new System.Windows.Forms.Padding(4);
+            this.guna2ImageButton1.Name = "guna2ImageButton1";
+            this.guna2ImageButton1.PressedState.ImageSize = new System.Drawing.Size(30, 30);
+            this.guna2ImageButton1.Size = new System.Drawing.Size(63, 54);
+            this.guna2ImageButton1.TabIndex = 2;
             // 
             // TaskSphere
             // 
@@ -266,6 +285,7 @@
         #endregion
 
         private Guna.UI2.WinForms.Guna2Panel guna2Panel1;
+        private Guna.UI2.WinForms.Guna2ImageButton guna2ImageButton1;
         private System.Windows.Forms.Label TaskSphere;
         private Guna.UI2.WinForms.Guna2AnimateWindow guna2AnimateWindow1;
         private Guna.UI2.WinForms.Guna2GradientButton guna2GradientButton1;

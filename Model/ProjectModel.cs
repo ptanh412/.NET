@@ -88,6 +88,6 @@ namespace SE_Project.Model
             this.name = name;
             this.description = description;
             this.user_id = user_id;
-        }   
+        }
     }
 }

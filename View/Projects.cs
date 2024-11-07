@@ -12,12 +12,16 @@ using System.Windows.Forms;
 using Guna.UI2.WinForms;
 using SE_Project.Model;
 using SE_Project.Controller;
+using SE_Project.View.PagesParts;
+using SE_Project.Helpers;
 
 namespace SE_Project
 {
     public partial class Projects : UserControl
     {
         ProjectController projectController;
+        private AllTasks allTaskView;
+        TaskController taskController;
         private int selectedRow;
         private int lastSelectedRow = -1;
 
@@ -60,8 +64,8 @@ namespace SE_Project
                 {
                     selectedRow = Convert.ToInt32(row.Cells["Id"].Value);
                     UpdateTaskView();
-                }
             }
+        }
         }
         private void projectList_CellClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -119,7 +123,12 @@ namespace SE_Project
             }
         }
 
+        //    if (project == null) return;
 
+        //    // Set the data to the textboxes
+        //    //guna2TextBox1.Text = project.Name;
+        //    //guna2TextBox2.Text = project.Description;
+        //}       
         private void addUserControl(UserControl userControl)
         {
             userControl.Dock = DockStyle.Fill;
@@ -129,7 +138,7 @@ namespace SE_Project
 
         }
 
-        private void LoadProjects()
+        public void LoadProjects()
         {
             var projects = ((IController)projectController).Items
                                 .Cast<ProjectModel>()
@@ -149,10 +158,43 @@ namespace SE_Project
                 projectList.Columns["User_id"].HeaderText = "User ID";
             }
 
+            projectList.Refresh();
+
             projectList.ClearSelection();
             selectedRow = -1;
         }
 
+        private void dgvProjects_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                // Lấy projectId từ DataGridView
+                int projectId = Convert.ToInt32(projectList.Rows[e.RowIndex].Cells["ProjectId"].Value);
+
+                // Gọi phương thức Load của TaskController để tải các task của dự án đã chọn
+                bool success = taskController.Load(projectId);
+
+                if (success)
+                {
+                    // Cập nhật AllTaskView với các task đã tải
+                    List<TaskModel> tasks = taskController.Items.Cast<TaskModel>().ToList();
+
+                    // Khởi tạo AllTaskView mới và cập nhật
+                    AllTasks allTaskView = new AllTasks();
+                    guna2Panel3.Controls.Clear(); // Clear panel chứa AllTaskView trước khi thêm mới
+                    guna2Panel3.Controls.Add(allTaskView);
+                    allTaskView.Dock = DockStyle.Fill; // Đảm bảo AllTaskView chiếm toàn bộ diện tích của panel
+                    allTaskView.UpdateTaskView(tasks);
+
+                    // Thêm AllTaskView vào panel
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Không có task nào cho dự án này.");
+                }
+            }
+        }
 
         private void guna2Panel1_Paint(object sender, PaintEventArgs e)
         {
@@ -189,6 +231,7 @@ namespace SE_Project
 
         private void Add_Project_RequestPanelBack(object sender, EventArgs e)
         {
+            // Logic to send panel2 to the back
             guna2Panel2.SendToBack();
         }
         private void guna2Button4_Click(object sender, EventArgs e)
@@ -203,6 +246,7 @@ namespace SE_Project
             DeleteProjects deleteProjects = new DeleteProjects();
             addUserControl2(deleteProjects);
             deleteProjects.RequestPanelBack += Add_Project_RequestPanelBack;
+            deleteProjects.ProjectDeleted += DeleteProject_ProjectDeleted; // Đăng ký sự kiện ProjectDeleted
         }
 
         private void guna2Panel2_Paint(object sender, PaintEventArgs e)
@@ -228,11 +272,26 @@ namespace SE_Project
         }
 
         private void guna2Panel1_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
         private void projectList_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
 
         }
 
+        private void guna2Button5_Click_1(object sender, EventArgs e)
+        {
+            DeleteProjects deleteProjects = new DeleteProjects();
+            addUserControl2(deleteProjects);
+            deleteProjects.RequestPanelBack += Add_Project_RequestPanelBack;
+            deleteProjects.ProjectDeleted += DeleteProject_ProjectDeleted; // Đăng ký sự kiện ProjectDeleted
+        }
 
+        private void DeleteProject_ProjectDeleted(object sender, EventArgs e)
+        {
+            // Gọi lại LoadProjects sau khi xóa thành công
+            LoadProjects();
+        }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using SE_Project.Helpers;
 using SE_Project.Model;
 
@@ -47,6 +49,30 @@ namespace SE_Project.Controller
             return result;
         }
 
+        public bool DeleteByName(string projectName)
+        {
+            if (string.IsNullOrEmpty(projectName)) return false;
+
+            // Tìm ID của dự án dựa trên tên dự án
+            int projectId = DBHelper.GetProjectIdByName(projectName);
+
+            // Kiểm tra nếu không tìm thấy ID (ví dụ tên dự án không tồn tại trong cơ sở dữ liệu)
+            if (projectId == -1)
+            {
+                MessageBox.Show("Dự án không tồn tại.");
+                return false;
+            }
+
+            // Gọi phương thức DeleteProject để xóa dự án theo ID
+            bool result = DBHelper.DeleteProject(projectId);
+            if (result)
+            {
+                // Nếu xóa thành công, loại bỏ dự án khỏi danh sách items
+                items.RemoveAll(p => ((ProjectModel)p).Id == projectId);
+            }
+            return result;
+        }
+
         public bool Load()
         {
             items.Clear();
@@ -64,6 +90,13 @@ namespace SE_Project.Controller
                 }
             }
             return true;
+        }
+
+        // Hàm để lấy dữ liệu dự án cùng với tên người dùng
+        public DataTable GetProjectDataWithUserNames()
+        {
+            // Gọi hàm từ DBHelper để lấy dữ liệu dự án kèm tên người dùng
+            return DBHelper.GetProjectWithUserName();
         }
 
         public bool Load(object id)
