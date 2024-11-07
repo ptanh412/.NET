@@ -1,6 +1,6 @@
 ﻿namespace SE_Project.PagesParts
 {
-    partial class AllProjects
+    partial class AllTask
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,7 +30,6 @@
         {
             this.AllProjectsPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.btn_AddTask = new Guna.UI2.WinForms.Guna2Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // AllProjectsPanel
@@ -38,7 +37,7 @@
             this.AllProjectsPanel.Location = new System.Drawing.Point(0, 81);
             this.AllProjectsPanel.Margin = new System.Windows.Forms.Padding(0);
             this.AllProjectsPanel.Name = "AllProjectsPanel";
-            this.AllProjectsPanel.Size = new System.Drawing.Size(1189, 605);
+            this.AllProjectsPanel.Size = new System.Drawing.Size(1812, 588);
             this.AllProjectsPanel.TabIndex = 0;
             this.AllProjectsPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.AllProjectsPanel_Paint);
             // 
@@ -65,24 +64,16 @@
             this.btn_AddTask.Text = "Add Task";
             this.btn_AddTask.Click += new System.EventHandler(this.btn_AddTask_Click);
             // 
-            // panel1
-            // 
-            this.panel1.Location = new System.Drawing.Point(372, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(467, 585);
-            this.panel1.TabIndex = 0;
-            // 
-            // AllProjects
+            // AllTask
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.Controls.Add(this.panel1);
             this.Controls.Add(this.btn_AddTask);
             this.Controls.Add(this.AllProjectsPanel);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "AllProjects";
-            this.Size = new System.Drawing.Size(1189, 588);
+            this.Name = "AllTask";
+            this.Size = new System.Drawing.Size(1189, 665);
             this.Load += new System.EventHandler(this.AllProjects_Load);
             this.ResumeLayout(false);
 
@@ -92,6 +83,5 @@
 
         private System.Windows.Forms.FlowLayoutPanel AllProjectsPanel;
         private Guna.UI2.WinForms.Guna2Button btn_AddTask;
-        private System.Windows.Forms.Panel panel1;
     }
 }

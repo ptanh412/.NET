@@ -28,11 +28,26 @@ namespace SE_Project.Controller
         {
             var task = model as TaskModel;
             if (task == null) return false;
-            bool result = DBHelper.CreateTask(task.Name, task.Description, task.Project_id, task.Status, task.Due_date, task.User_id );
+
+            // Kiểm tra project_id có tồn tại trước khi tạo task
+            if (!IsProjectExists(task.Project_id))
+            {
+                return false;
+            }
+
+            bool result = DBHelper.CreateTask(
+                task.Name,
+                task.Description,
+                task.Project_id,
+                task.Status,
+                task.Due_date,
+                task.User_id
+            );
+
             if (result) items.Add(task);
             return result;
         }
-        public bool Delete(IModel model)
+            public bool Delete(IModel model)
         {
             return true;
         }
@@ -115,6 +130,11 @@ namespace SE_Project.Controller
         public bool IsExist(IModel model)
         {
             return true;
+        }
+        public bool IsProjectExists(int projectId)
+        {
+            // Thêm phương thức kiểm tra project tồn tại
+            return DBHelper.GetProjectWithUserNameById(projectId) != null;
         }
     }
 }

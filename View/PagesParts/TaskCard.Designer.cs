@@ -1,6 +1,6 @@
 ﻿namespace SE_Project.PagesParts
 {
-    partial class ProjectCard
+    partial class TaskCard
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectCard));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskCard));
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
             this.CardDueDate = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();

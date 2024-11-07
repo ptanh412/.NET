@@ -136,6 +136,7 @@
             this.guna2Button5.Size = new System.Drawing.Size(240, 55);
             this.guna2Button5.TabIndex = 5;
             this.guna2Button5.Text = "Delete Projects";
+            this.guna2Button5.Click += new System.EventHandler(this.guna2Button5_Click_1);
             // 
             // guna2Button4
             // 
