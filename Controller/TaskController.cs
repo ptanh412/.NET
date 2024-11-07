@@ -34,7 +34,10 @@ namespace SE_Project.Controller
         }
         public bool Delete(IModel model)
         {
-            return true;
+            var task = model as TaskModel;
+            if (task == null) return false;
+
+            return Delete(task.Id);
         }
 
         public bool Delete(object id)
@@ -69,20 +72,12 @@ namespace SE_Project.Controller
             return true;
         }
 
-        public bool Load(object id)
+        public bool Load(object projectId)
         {
             items.Clear();
-            List<TaskModel> tasks = DBHelper.GetTasks();
+            List<TaskModel> tasks = DBHelper.GetTasksByProjectId((int)projectId);
 
             if (tasks == null) return false;
-            //var fullTasks = DBHelper.GetTasksByProjectId();
-            //if (fullTasks != null)
-            //{
-            //    foreach (var fullTask in fullTasks)
-            //    {
-            //        items.Add((IModel)fullTask);
-            //    }
-            //}
 
             // Thêm tất cả các task vào danh sách items
             foreach (var task in tasks)
@@ -96,38 +91,59 @@ namespace SE_Project.Controller
 
         public IModel Read(object id)
         {
-            if (id == null) return null;
-
-            ProjectModel project = DBHelper.GetProjectWithUserNameById((int)id);
-            return project;
+            var task = DBHelper.GetTasks().Find(t => t.Id == (int)id);
+            return task;
         }
 
         public bool Update(IModel model)
         {
-            var project = model as ProjectModel;
-            if (project == null) return false;
+            var task = model as TaskModel;
+            if (task == null) return false;
 
-            bool result = DBHelper.UpdateProject(project.Id, project.Name, project.Description, project.User_id);
+            bool result = DBHelper.UpdateTask(
+                task.Id,
+                task.Name,
+                task.Description,
+                task.Project_id,
+                task.Status,
+                task.Due_date,
+                task.User_id
+            );
+
             if (result)
             {
-                int index = items.FindIndex(p => ((ProjectModel)p).Id == project.Id);
-                if (index >= 0) items[index] = project;
+                var existingTask = items.Find(p => ((TaskModel)p).Id == task.Id) as TaskModel;
+                if (existingTask != null)
+                {
+                    existingTask.Name = task.Name;
+                    existingTask.Description = task.Description;
+                    existingTask.Project_id = task.Project_id;
+                    existingTask.Status = task.Status;
+                    existingTask.Due_date = task.Due_date;
+                    existingTask.User_id = task.User_id;
+                }
             }
-
             return result;
         }
-        public bool IsExist(Object id)
+
+        public bool IsExist(object id)
         {
-            return true;
+            return items.Exists(p => ((TaskModel)p).Id == (int)id);
         }
+
         public bool IsExist(IModel model)
         {
-            return true;
+            var task = model as TaskModel;
+            if (task == null) return false;
+
+            return IsExist(task.Id);
         }
+
         public bool IsProjectExists(int projectId)
         {
-            // Thêm phương thức kiểm tra project tồn tại
-            return DBHelper.GetProjectWithUserNameById(projectId) != null;
+            // Giả sử có một phương thức kiểm tra tồn tại của project
+            // Bạn có thể triển khai trong DBHelper
+            return DBHelper.CheckProjectExists(projectId);
         }
     }
 }

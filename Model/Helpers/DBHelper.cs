@@ -10,12 +10,13 @@ using System.Security.Cryptography;
 using SE_Project.Model;
 using System.Data;
 
+using System.Configuration;
 
 namespace SE_Project.Helpers
 {
     class DBHelper
     {
-        static string conString = @"Data Source=DESKTOP-S8VA2O5;Initial Catalog=TaskSphere1;Integrated Security=True;";
+        static string conString = ConfigurationManager.ConnectionStrings["db"].ConnectionString;
         public static bool RegisterUser(string username, string password, string name)
         {
             using (SqlConnection con = new SqlConnection(conString))
@@ -101,11 +102,46 @@ namespace SE_Project.Helpers
             string hashedInput = HashPassword(inputPassword);
             return hashedInput == hashedPassword;
         }
+        public static List<UserModel> GetAllUsers()
+        {
+            List<UserModel> users = new List<UserModel>();
+
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                string query = "SELECT id, name, username FROM userlist";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    try
+                    {
+                        con.Open();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                users.Add(new UserModel
+                                {
+                                    ID = (int)reader["id"],
+                                    Name = reader["name"].ToString(),
+                                    Username = reader["username"].ToString()
+                                });
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error getting users: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return null;
+                    }
+                }
+            }
+
+            return users;
+        }
         public static bool CreateTask(string name, string description, int projectId, string status, DateTime dueDate, int assignedUserId)
         {
             using (SqlConnection con = new SqlConnection(conString))
             {
-                string query = "INSERT INTO tasks (name, description, project_id, status, due_date, user_id) VALUES (@name, @description, @projectId, @status, @dueDate, @userId)";
+                string query = "INSERT INTO tasks ( name, description, project_id, status, due_date, user_id) VALUES (@name, @description, @projectId, @status, @dueDate, @userId)";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -136,7 +172,9 @@ namespace SE_Project.Helpers
 
             using (SqlConnection con = new SqlConnection(conString))
             {
-                string query = "SELECT * FROM tasks";
+                string query = "SELECT t.*, p.name AS project_name, u.name AS user_name FROM tasks t " +
+                               "JOIN projects p ON t.project_id = p.id " +
+                               "JOIN userlist u ON t.user_id = u.id";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
@@ -149,13 +187,15 @@ namespace SE_Project.Helpers
                             {
                                 tasks.Add(new TaskModel
                                 {
-                                    Id= (int)reader["id"],
+                                    Id = (int)reader["id"],
                                     Name = reader["name"].ToString(),
                                     Description = reader["description"].ToString(),
                                     Project_id = (int)reader["project_id"],
+                                    ProjectName = reader["project_name"].ToString(),
                                     Status = reader["status"].ToString(),
                                     Due_date = (DateTime)reader["due_date"],
-                                    User_id = (int)reader["user_id"]
+                                    User_id = (int)reader["user_id"],
+                                    Assigned = reader["user_name"].ToString()
                                 });
                             }
                         }
@@ -191,11 +231,11 @@ namespace SE_Project.Helpers
                                 {
                                     Id = reader.GetInt32(0), // id
                                     Name = reader.GetString(1), // name
-                                    UserId = reader.GetInt32(2), // user_id
+                                    User_id = reader.GetInt32(2), // user_id
                                     Description = reader.GetString(3), // description
-                                    ProjectId = reader.GetInt32(4), // project_id
+                                    Project_id = reader.GetInt32(4), // project_id
                                     Status = reader.GetString(5), // status
-                                    DueDate = reader.GetDateTime(6), // due_date
+                                    Due_date = reader.GetDateTime(6), // due_date
                                     CreatedAt = reader.GetDateTime(7) // created_at
                                 };
 
@@ -318,175 +358,10 @@ namespace SE_Project.Helpers
                 }
             }
         }
-        public static List<ProjectModel> GetProjects()
-        {
-            List<ProjectModel> projects = new List<ProjectModel>();
+       
 
-            using (SqlConnection con = new SqlConnection(conString))
-            {
-                string query = "SELECT * FROM projects";
 
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    try
-                    {
-                        con.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                projects.Add(new ProjectModel
-                                {
-                                    Id = (int)reader["id"],
-                                    Name = reader["name"].ToString(),
-                                    Description = reader["description"].ToString(),
-                                    User_id = (int)reader["user_id"]
-                                });
-                            }
-                        }
-                    }
-                    catch (SqlException ex)
-                    {
-                        MessageBox.Show("Lỗi SQL: " + ex.Message);
-                    }
-                }
-            }
-            return projects;
-        }
 
-        public static ProjectModel GetProjectById(int projectId)
-        {
-            using (SqlConnection con = new SqlConnection(conString))
-            {
-                string query = "SELECT * FROM projects WHERE id = @projectId";
-
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@projectId", projectId);
-
-                    try
-                    {
-                        con.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                return new ProjectModel
-                                {
-                                    Id = (int)reader["id"],
-                                    Name = reader["name"].ToString(),
-                                    Description = reader["description"].ToString(),
-                                    User_id = (int)reader["user_id"]
-                                };
-                            }
-                            else
-                            {
-                                return null;
-                            }
-                        }
-                    }
-                    catch (SqlException ex)
-                    {
-                        MessageBox.Show("Lỗi SQL: " + ex.Message);
-                        return null;
-                    }
-                }
-            }
-        }
-
-        public static DataTable GetProjectWithUserName()
-        {
-            DataTable resultTable = new DataTable();
-
-            using (SqlConnection conn = new SqlConnection(conString))
-            {
-                string query = @"
-            SELECT 
-                p.id AS ProjectId, 
-                p.name AS ProjectName, 
-                p.description AS ProjectDescription, 
-                u.username AS CreatedBy, 
-                COUNT(DISTINCT t.id) AS TaskCounted,  -- Đếm số lượng task riêng biệt
-                COUNT(DISTINCT t.user_id) AS AssignedCount  -- Đếm số người phân công task riêng biệt
-            FROM 
-                projects p
-            LEFT JOIN 
-                userlist u ON p.user_id = u.id
-            LEFT JOIN 
-                tasks t ON t.project_id = p.id
-            GROUP BY 
-                p.id, p.name, p.description, u.username";  // Sử dụng GROUP BY như trong câu truy vấn của bạn
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    conn.Open();
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                    {
-                        adapter.Fill(resultTable);
-                    }
-                }
-            }
-
-            return resultTable;
-        }
-
-        public static ProjectModel GetProjectWithUserNameById(int projectId)
-        {
-            ProjectModel project = null;
-            using (SqlConnection con = new SqlConnection(conString))
-            {
-                
-            string query = @"SELECT p.id, p.name, p.description, p.user_id, u.name AS user_name 
-                         FROM projects p
-                     JOIN userlist u ON p.user_id = u.id
-                         WHERE p.id = @ProjectId";
-
-                using (SqlCommand cmd = new SqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@ProjectId", projectId);
-                    con.Open();
-
-                    using (SqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        if (reader.Read())
-                        {
-                            project = new ProjectModel
-                            {
-                                Id = (int)reader["id"],
-                                Name = reader["name"].ToString(),
-                                Description = reader["description"].ToString(),
-                                User_id = (int)reader["user_id"],
-                                Created_by = reader["user_name"].ToString()
-                            };
-                        }
-                    }
-                }
-            }
-
-            // Nếu bạn muốn lấy tên người dùng, có thể thực hiện truy vấn riêng biệt
-            if (project != null)
-            {
-                string userNameQuery = "SELECT name FROM userlist WHERE id = @UserId";
-                using (SqlConnection con = new SqlConnection(conString))
-                {
-                    using (SqlCommand cmd = new SqlCommand(userNameQuery, con))
-                    {
-                        cmd.Parameters.AddWithValue("@UserId", project.UserId);
-                        con.Open();
-
-                        object result = cmd.ExecuteScalar();
-                        if (result != null)
-                        {
-                            // Nếu tìm thấy, cập nhật tên người dùng vào project (hoặc trả về theo nhu cầu)
-                            string userName = result.ToString();
-                            // Có thể trả về tên này tại đây nếu cần thiết
-                        }
-                    }
-                }
-            }
-
-            return project;
-        }
 
         public static bool UpdateProject(int projectId, string name, string description, int userId)
         {
@@ -540,94 +415,204 @@ namespace SE_Project.Helpers
             }
         }
 
-        public static List<TaskModel> GetTasksByProjectId(int projectId)
+
+
+        public static bool CheckProjectExists(int projectId)
         {
-            List<TaskModel> tasks = new List<TaskModel>();
-
-            using (SqlConnection con = new SqlConnection(conString))
+            using (SqlConnection conn = new SqlConnection("YourConnectionString"))
             {
-                string query = "SELECT t.*, u.name AS user_name FROM tasks t JOIN userlist u ON t.user_id = u.id WHERE project_id = @ProjectId";
+                conn.Open();
+                string query = "SELECT COUNT(1) FROM Projects WHERE ProjectId = @ProjectId";
 
-                using (SqlCommand cmd = new SqlCommand(query, con))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@ProjectId", projectId);
 
+                    int count = (int)cmd.ExecuteScalar();
+                    return count > 0;
+                }
+            }
+        }
+
+        public static int CreateProject(string name, string description, int createdBy, List<int> participantIds)
+        {
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                con.Open();
+                using (SqlTransaction transaction = con.BeginTransaction())
+                {
                     try
                     {
-                        con.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        // Tạo project và lấy ID
+                        string projectQuery = @"INSERT INTO projects (name, description, created_by) 
+                                         VALUES (@name, @description, @createdBy);
+                                         SELECT SCOPE_IDENTITY();";
+
+                        int projectId;
+                        using (SqlCommand cmd = new SqlCommand(projectQuery, con, transaction))
                         {
-                            while (reader.Read())
+                            cmd.Parameters.AddWithValue("@name", name);
+                            cmd.Parameters.AddWithValue("@description", description);
+                            cmd.Parameters.AddWithValue("@createdBy", createdBy);
+                            projectId = Convert.ToInt32(cmd.ExecuteScalar());
+                        }
+
+                        // Thêm người tạo vào project_user
+                        string creatorParticipantQuery = @"INSERT INTO project_user (project_id, user_id)
+                                                     VALUES (@projectId, @userId)";
+                        using (SqlCommand cmd = new SqlCommand(creatorParticipantQuery, con, transaction))
+                        {
+                            cmd.Parameters.AddWithValue("@projectId", projectId);
+                            cmd.Parameters.AddWithValue("@userId", createdBy);
+                            cmd.ExecuteNonQuery();
+                        }
+
+                        // Thêm những người tham gia khác
+                        if (participantIds != null && participantIds.Count > 0)
+                        {
+                            string participantQuery = @"INSERT INTO project_user (project_id, user_id)
+                                                  VALUES (@projectId, @userId)";
+                            using (SqlCommand cmd = new SqlCommand(participantQuery, con, transaction))
                             {
-                                tasks.Add(new TaskModel
-                        {
-                                    Id = (int)reader["id"],
-                                    Name = reader["name"].ToString(),
-                                    Description = reader["description"].ToString(),
-                                    Project_id = (int)reader["project_id"],
-                                    Status = reader["status"].ToString(),
-                                    Due_date = (DateTime)reader["due_date"],
-                                    User_id = (int)reader["user_id"],
-                                    Assigned = reader["user_name"].ToString(),
-                                });
+                                foreach (int userId in participantIds.Where(id => id != createdBy))
+                                {
+                                    cmd.Parameters.Clear();
+                                    cmd.Parameters.AddWithValue("@projectId", projectId);
+                                    cmd.Parameters.AddWithValue("@userId", userId);
+                                    cmd.ExecuteNonQuery();
+                                }
+                            }
                         }
-                        else
-                        {
-                            return -1; // Trả về -1 nếu không tìm thấy dự án
-                        }
+
+                        transaction.Commit();
+                        return projectId;
                     }
-                    catch (SqlException ex)
+                    catch (Exception ex)
                     {
-                        MessageBox.Show("Lỗi SQL: " + ex.Message);
-                        return -1;
+                        transaction.Rollback();
+                        throw;
                     }
                 }
             }
-            return tasks;
         }
 
+        public static List<ProjectModel> GetAllProjects()
+        {
+            Dictionary<int, ProjectModel> projectDict = new Dictionary<int, ProjectModel>();
 
-        //public static List<TaskModel> GetTasksByProjectId(int projectId)
-        //{
-        //    List<TaskModel> tasks = new List<TaskModel>();
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                string query = @"SELECT p.id, p.name, p.description, p.created_by, p.created_at,
+                                  creator.name as creator_name,
+                                  pu.user_id,
+                                  u.name as participant_name
+                           FROM projects p
+                           JOIN userlist creator ON p.created_by = creator.id
+                           LEFT JOIN project_user pu ON p.id = pu.project_id
+                           LEFT JOIN userlist u ON pu.user_id = u.id
+                           ORDER BY p.id";
 
-        //    using (SqlConnection con = new SqlConnection(conString))
-        //    {
-        //        string query = "SELECT t.*, u.name AS user_name FROM tasks t JOIN userlist u ON t.user_id = u.id WHERE project_id = @ProjectId";
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    con.Open();
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            int projectId = (int)reader["id"];
 
-        //        using (SqlCommand cmd = new SqlCommand(query, con))
-        //        {
-        //            cmd.Parameters.AddWithValue("@ProjectId", projectId);
+                            if (!projectDict.ContainsKey(projectId))
+                            {
+                                projectDict[projectId] = new ProjectModel
+                                {
+                                    Id = projectId,
+                                    Name = reader["name"].ToString(),
+                                    Description = reader["description"].ToString(),
+                                    CreatedBy = (int)reader["created_by"],
+                                    CreatorName = reader["creator_name"].ToString(),
+                                    CreatedAt = (DateTime)reader["created_at"],
+                                    Participants = new List<UserModel>()
+                                };
+                            }
 
-        //            try
-        //            {
-        //                con.Open();
-        //                using (SqlDataReader reader = cmd.ExecuteReader())
-        //                {
-        //                    while (reader.Read())
-        //                    {
-        //                        tasks.Add(new TaskModel
-        //                        {
-        //                            Id = (int)reader["id"],
-        //                            Name = reader["name"].ToString(),
-        //                            Description = reader["description"].ToString(),
-        //                            Project_id = (int)reader["project_id"],
-        //                            Status = reader["status"].ToString(),
-        //                            Due_date = (DateTime)reader["due_date"],
-        //                            User_id = (int)reader["user_id"],
-        //                            Assigned = reader["user_name"].ToString(),
-        //                        });
-        //                    }
-        //                }
-        //            }
-        //            catch (SqlException ex)
-        //            {
-        //                MessageBox.Show("Lỗi SQL: " + ex.Message);
-        //            }
-        //        }
-        //    }
-        //    return tasks;
-        //}
+                            // Thêm người tham gia vào project
+                            int userId = (int)reader["user_id"];
+                            string participantName = reader["participant_name"].ToString();
+
+                            // Kiểm tra xem người dùng đã được thêm vào danh sách chưa
+                            if (!projectDict[projectId].Participants.Any(p => p.ID == userId))
+                            {
+                                projectDict[projectId].Participants.Add(new UserModel
+                                {
+                                    ID = userId,
+                                    Name = participantName
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            return projectDict.Values.ToList();
+        }
+
+        public static ProjectModel GetProjectById(int projectId)
+        {
+            ProjectModel project = null;
+
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                string query = @"SELECT p.id, p.name, p.description, p.created_by, p.created_at,
+                                  creator.name as creator_name,
+                                  pu.user_id,
+                                  u.name as participant_name
+                           FROM projects p
+                           JOIN userlist creator ON p.created_by = creator.id
+                           LEFT JOIN project_user pu ON p.id = pu.project_id
+                           LEFT JOIN userlist u ON pu.user_id = u.id
+                           WHERE p.id = @projectId";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@projectId", projectId);
+                    con.Open();
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (project == null)
+                            {
+                                project = new ProjectModel
+                                {
+                                    Id = (int)reader["id"],
+                                    Name = reader["name"].ToString(),
+                                    Description = reader["description"].ToString(),
+                                    CreatedBy = (int)reader["created_by"],
+                                    CreatorName = reader["creator_name"].ToString(),
+                                    CreatedAt = (DateTime)reader["created_at"],
+                                    Participants = new List<UserModel>()
+                                };
+                            }
+
+                            int userId = (int)reader["user_id"];
+                            string participantName = reader["participant_name"].ToString();
+
+                            if (!project.Participants.Any(p => p.ID == userId))
+                            {
+                                project.Participants.Add(new UserModel
+                                {
+                                    ID = userId,
+                                    Name = participantName
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+
+            return project;
+        }
 
     }
 }
