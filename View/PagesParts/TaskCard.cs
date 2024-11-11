@@ -16,11 +16,11 @@ namespace SE_Project.PagesParts
 {
     public partial class TaskCard : UserControl
     {
-        ProjectController controller;
+        TaskController controller;
         public TaskCard()
         {
             InitializeComponent();
-            controller = new ProjectController();
+            controller = new TaskController();
         }
         public string TaskTitle
         {
@@ -42,6 +42,12 @@ namespace SE_Project.PagesParts
             get { return CardDueDate.Text; }
             set { CardDueDate.Text = value; }
         }
+        public string ProjectName
+        {
+            get { return CardProjectName.Text; }
+            set { CardProjectName.Text = value; }
+        }
+
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
@@ -51,17 +57,22 @@ namespace SE_Project.PagesParts
         {
 
         }
-        public void LoadData(TaskModel task)
+        public void LoadData(TaskModel task, string projectName = null)
         {
             if (task != null)
             {
-                TaskTitle = task.Name;
-                TasktDesc = task.Description;
-                TaskAssigned = task.Assigned;
-                TaskDueDate = task.Due_date.ToString();
-                guna2ComboBox1.Text = task.Status;
+                TaskTitle = task.Name ?? "No title"; // Kiểm tra null để tránh lỗi
+                TasktDesc = task.Description ?? "No description";
+                TaskAssigned = task.Assigned ?? "Not assigned";
+                TaskDueDate = task.Due_date.ToString("dd/MM/yyyy"); // Định dạng ngày tháng
+                guna2ComboBox1.Text = task.Status ?? "Not set"; // Kiểm tra nếu Status null
+                if (!string.IsNullOrEmpty(projectName))
+                {
+                    ProjectName = projectName;
+                }
             }
         }
+
         private void guna2ComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             //MessageBox.Show(guna2ComboBox1.SelectedItem.ToString());
@@ -71,6 +82,11 @@ namespace SE_Project.PagesParts
         private void guna2ImageRadioButton1_CheckedChanged(object sender, EventArgs e)
         {
             //MessageBox.Show("Operation Successful");
+        }
+
+        private void btn_UpdateTask_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

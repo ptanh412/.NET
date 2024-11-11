@@ -37,8 +37,8 @@ namespace SE_Project.View.Forms
         {
             try
             {
-                // Lấy danh sách tất cả người dùng trừ người đang đăng nhập
-                allUsers = DBHelper.GetAllUsers().Where(u => u.ID != Session.UserId).ToList();
+                // Lấy danh sách người dùng chỉ thuộc về dự án hiện tại
+                allUsers = DBHelper.GetUsersByProjectId(projectId);
 
                 // Thêm người dùng vào Guna2ComboBox
                 guna2ComboBox1.Items.Clear();
@@ -59,19 +59,21 @@ namespace SE_Project.View.Forms
             }
         }
 
+
         public void SetDataToText(object item)
         {
             if (item is TaskModel task)
             {
                 guna2TextBox1.Text = task.Name;
                 guna2TextBox2.Text = task.Description;
-
+                dateTimePicker1.Value = task.Due_date;
                 // Set giá trị của ComboBox cho người đã được gán trong Task
                 var user = allUsers.FirstOrDefault(u => u.ID == task.User_id);
-                if (user != null)
+                if (user != null && guna2ComboBox1.Items.Contains(user.Name))
                 {
                     guna2ComboBox1.SelectedItem = user.Name;
                 }
+
             }
         }
 
@@ -79,12 +81,14 @@ namespace SE_Project.View.Forms
         {
             // Lấy người dùng được chọn từ Guna2ComboBox
             UserModel selectedParticipant = allUsers.FirstOrDefault(u => u.Name == guna2ComboBox1.SelectedItem?.ToString());
-
             // Trả về TaskModel với người dùng được chọn
             return new TaskModel
             {
                 Name = guna2TextBox1.Text,
                 Description = guna2TextBox2.Text,
+                Due_date = dateTimePicker1.Value,
+                Project_id = projectId,
+                Status = "todo",
                 User_id = selectedParticipant != null ? selectedParticipant.ID : 0 // Gán ID người dùng được chọn (hoặc 0 nếu không chọn)
             };
         }
@@ -149,19 +153,32 @@ namespace SE_Project.View.Forms
                         MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-
-                var task = new TaskModel
+                UserModel selectedUser = allUsers.FirstOrDefault(u => u.Name == guna2ComboBox1.SelectedItem?.ToString());
+                if (selectedUser == null)
                 {
-                    Name = guna2TextBox1.Text,
-                    Description = guna2TextBox2.Text,
-                    User_id = Session.UserId,
-                    Assigned = Session.Name,
-                    Status = "todo",
-                    Due_date = dateTimePicker1.Value,
-                    Project_id = projectId
-                };
+                    MessageBox.Show("Please select a user to assign the task!", "Validation Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                var task = (TaskModel)GetDataFromText();
+                if (task == null)
+                {
+                    MessageBox.Show("Failed to retrieve task data. Please check inputs.", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
-                if (taskController.Create(task))
+                string debugInfo = $"Debug Info:\n" +
+                                   $"Task Name: {task.Name}\n" +
+                                   $"Description: {task.Description}\n" +
+                                   $"Project ID: {task.Project_id}\n" +
+                                   $"Status: {task.Status}\n" +
+                                   $"Due Date: {task.Due_date}\n" +
+                                   $"User ID: {task.User_id}";
+
+                MessageBox.Show(debugInfo, "Debug Info");
+                bool result = taskController.Create(task);
+                if (result)
                 {
                     MessageBox.Show("Task added successfully!", "Success",
                         MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -12,7 +12,7 @@ namespace SE_Project.Controller
     {
         public TaskController()
         {
-            items = new List<IModel>(); // Khởi tạo danh sách ở đây
+            items = new List<IModel>(); 
         }
         private List<IModel> items;
         public List<IModel> Items
@@ -30,10 +30,10 @@ namespace SE_Project.Controller
             if (task == null) return false;
 
             // Kiểm tra project_id có tồn tại trước khi tạo task
-            if (!IsProjectExists(task.Project_id))
-            {
-                return false;
-            }
+            //if (!IsProjectExists(task.Project_id))
+            //{
+            //    return false;
+            //}
 
             bool result = DBHelper.CreateTask(
                 task.Name,

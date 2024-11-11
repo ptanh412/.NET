@@ -183,14 +183,14 @@
             // guna2HtmlLabel1
             // 
             this.guna2HtmlLabel1.BackColor = System.Drawing.Color.Transparent;
-            this.guna2HtmlLabel1.Font = new System.Drawing.Font("Century Gothic", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.guna2HtmlLabel1.Font = new System.Drawing.Font("Century Gothic", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.guna2HtmlLabel1.Location = new System.Drawing.Point(76, 455);
             this.guna2HtmlLabel1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2HtmlLabel1.Name = "guna2HtmlLabel1";
-            this.guna2HtmlLabel1.Padding = new System.Windows.Forms.Padding(30, 20, 15, 10);
-            this.guna2HtmlLabel1.Size = new System.Drawing.Size(167, 64);
+            this.guna2HtmlLabel1.Padding = new System.Windows.Forms.Padding(0, 0, 40, 0);
+            this.guna2HtmlLabel1.Size = new System.Drawing.Size(204, 29);
             this.guna2HtmlLabel1.TabIndex = 21;
-            this.guna2HtmlLabel1.Text = "Assigned";
+            this.guna2HtmlLabel1.Text = "Task Performer";
             this.guna2HtmlLabel1.Click += new System.EventHandler(this.guna2HtmlLabel1_Click);
             // 
             // guna2ComboBox1
@@ -205,16 +205,16 @@
             this.guna2ComboBox1.Font = new System.Drawing.Font("Century Gothic", 9.75F);
             this.guna2ComboBox1.ForeColor = System.Drawing.Color.Black;
             this.guna2ComboBox1.ItemHeight = 30;
-            this.guna2ComboBox1.Location = new System.Drawing.Point(251, 455);
+            this.guna2ComboBox1.Location = new System.Drawing.Point(278, 455);
             this.guna2ComboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.guna2ComboBox1.Name = "guna2ComboBox1";
-            this.guna2ComboBox1.Size = new System.Drawing.Size(158, 36);
+            this.guna2ComboBox1.Size = new System.Drawing.Size(131, 36);
             this.guna2ComboBox1.TabIndex = 22;
             this.guna2ComboBox1.SelectedIndexChanged += new System.EventHandler(this.guna2ComboBox1_SelectedIndexChanged);
             // 
             // dateTimePicker1
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(250, 554);
+            this.dateTimePicker1.Location = new System.Drawing.Point(251, 550);
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(158, 22);
             this.dateTimePicker1.TabIndex = 24;

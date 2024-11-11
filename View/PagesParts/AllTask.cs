@@ -26,7 +26,6 @@ namespace SE_Project.PagesParts
         {
             InitializeComponent();
             taskController = new TaskController();
-            //LoadTask();
             LoadTasksForProject();
             this.projectId = projectId;
             AllProjectsPanel.BringToFront();
@@ -40,10 +39,18 @@ namespace SE_Project.PagesParts
             {
                 AllProjectsPanel.Controls.Clear();
 
-                // Sử dụng TaskController để load tasks
-                taskController.Load(projectId);
+                // Kiểm tra xem có projectId hay không và lấy tên project tương ứng
+                string projectName = null;
+                if (projectId > 0)
+                {
+                    var project = DBHelper.GetProjectById(projectId);
+                    projectName = project?.Name ?? "Unknown Project"; // Lấy tên project nếu có projectId
+                }
 
-                if (taskController.Items.Count == 0)
+                // Sử dụng TaskController để load tasks theo projectId
+                bool tasksLoaded = (projectId > 0) ? taskController.Load(projectId) : taskController.Load();
+
+                if (!tasksLoaded || taskController.Items.Count == 0)
                 {
                     Label noTasksLabel = new Label
                     {
@@ -56,11 +63,16 @@ namespace SE_Project.PagesParts
                     return;
                 }
 
-                // Thêm các task vào AllProjectsPanel
+                // Thêm các task vào AllProjectsPanel và truyền projectName vào từng task
                 foreach (TaskModel task in taskController.Items)
                 {
                     TaskCard taskCard = new TaskCard();
-                    taskCard.LoadData(task);
+
+                    // Nếu không có projectId (tức là đang load tất cả các task), lấy tên project cho từng task
+                    string taskProjectName = projectId > 0 ? projectName : DBHelper.GetProjectById(task.Project_id)?.Name;
+
+                    // Truyền task và projectName (taskProjectName) vào LoadData
+                    taskCard.LoadData(task, taskProjectName);
                     AllProjectsPanel.Controls.Add(taskCard);
                 }
             }
@@ -70,26 +82,6 @@ namespace SE_Project.PagesParts
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
-        //private void LoadTask()
-        //{
-        //    taskController.Load();
-
-        //    //if (taskController.Items.Count == 0)
-        //    //{
-        //    //    MessageBox.Show("No projects were loaded.");
-        //    //    return;
-        //    //}
-
-        //    foreach (TaskModel task in taskController.Items)
-        //    {
-        //        TaskCard projectCard = new TaskCard();
-        //        projectCard.LoadData(task);
-        //        AllProjectsPanel.Controls.Add(projectCard);
-        //    }
-        //}
-
-
         private void AllProjects_Load(object sender, EventArgs e)
         {
             AllProjectsPanel.Controls.Clear();
@@ -148,44 +140,25 @@ namespace SE_Project.PagesParts
 
         private void btn_AddTask_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(projectId.ToString());
             if (projectId <= 0)
             {
-                MessageBox.Show("Invalid project selected", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Invalid project selected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
-            
 
-            try
-            {                
-                // Tạo instance của AddTasks form
-                AddTasks addTaskForm = new AddTasks(projectId)
-                {
-                    StartPosition = FormStartPosition.CenterScreen,
-                    TopLevel = true,
-                    FormBorderStyle = FormBorderStyle.FixedDialog,
-                    MaximizeBox = false,
-                    MinimizeBox = false
-                };
-
-                //// Đăng ký event handler
-                addTaskForm.TaskAdded += OnTaskAdded;
-
-                // Xử lý khi form đóng
-                addTaskForm.FormClosed += (s, args) =>
-                {
-                    LoadTasksForProject(); // Refresh task list khi form đóng
-                };
-
-                // Show form dưới dạng dialog
-                addTaskForm.ShowDialog();
-            }
-            catch (Exception ex)
+            AddTasks addTaskForm = new AddTasks(projectId)
             {
-                MessageBox.Show($"Error showing add task form: {ex.Message}", "Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+                StartPosition = FormStartPosition.CenterScreen,
+                TopLevel = true,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                MaximizeBox = false,
+                MinimizeBox = false
+            };
+
+            addTaskForm.TaskAdded += OnTaskAdded;
+
+            addTaskForm.FormClosed += (s, args) => LoadTasksForProject(); // Refresh danh sách task khi form đóng
+            addTaskForm.ShowDialog();
         }
 
         // Event handler khi task mới được thêm

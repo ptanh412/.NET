@@ -135,6 +135,40 @@ namespace SE_Project.Helpers
 
             return users;
         }
+        public static List<UserModel> GetUsersByProjectId(int projectId)
+        {
+            var users = new List<UserModel>();
+
+            using (var connection = new SqlConnection(conString))
+            {
+                string query = @"
+                                SELECT u.id, u.name
+                                FROM userlist u
+                                JOIN project_user pu ON u.id = pu.user_id
+                                WHERE pu.project_id = @projectId";
+
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@projectId", projectId);
+
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(new UserModel
+                            {
+                                ID = reader.GetInt32(0),
+                                Name = reader.GetString(1)
+                            });
+                        }
+                    }
+                }
+            }
+
+            return users;
+        }
+
         public static bool CreateTask(string name, string description, int projectId, string status, DateTime dueDate, int assignedUserId)
         {
             using (SqlConnection con = new SqlConnection(conString))
@@ -158,12 +192,21 @@ namespace SE_Project.Helpers
                     }
                     catch (SqlException ex)
                     {
-                        MessageBox.Show("Lỗi SQL: " + ex.Message);
+                        MessageBox.Show($"SQL Error: {ex.Message}\nError Code: {ex.Number}", "Database Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return false;
+                    }
+
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Unexpected error: {ex.Message}", "Error",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return false;
                     }
                 }
             }
         }
+
         public static List<TaskModel> GetTasks()
         {
             List<TaskModel> tasks = new List<TaskModel>();
@@ -332,10 +375,10 @@ namespace SE_Project.Helpers
         }
         public static bool CheckProjectExists(int projectId)
         {
-            using (SqlConnection conn = new SqlConnection("YourConnectionString"))
+            using (SqlConnection conn = new SqlConnection(conString))
             {
                 conn.Open();
-                string query = "SELECT COUNT(1) FROM Projects WHERE ProjectId = @ProjectId";
+                string query = "SELECT COUNT(1) FROM projects WHERE ProjectId = @ProjectId";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
