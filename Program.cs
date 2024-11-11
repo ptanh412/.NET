@@ -1,4 +1,5 @@
 ﻿using SE_Project.Forms;
+using SE_Project.View.PagesParts;
 using System;
 using System.Collections.Generic;
 using System.Linq;

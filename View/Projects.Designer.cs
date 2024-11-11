@@ -91,6 +91,7 @@
             this.projectList.RowHeadersWidth = 51;
             this.projectList.Size = new System.Drawing.Size(1180, 295);
             this.projectList.TabIndex = 0;
+            this.projectList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.projectList_CellContentClick_1);
             // 
             // guna2Panel3
             // 

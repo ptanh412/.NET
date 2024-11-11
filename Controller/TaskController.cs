@@ -64,6 +64,7 @@ namespace SE_Project.Controller
             return result;
         }
 
+        // Sử dụng hàm GetTasksByProjectId ở đây
         public bool Load()
         {
             items.Clear();
@@ -73,8 +74,16 @@ namespace SE_Project.Controller
 
             foreach (var task in tasks)
             {
-                items.Add(task);
+                var fullTasks = DBHelper.GetTasksByProjectId(task.Project_id);
+                if (fullTasks != null)
+                {
+                    foreach (var fullTask in fullTasks)
+                    {
+                        items.Add((IModel)fullTask);
+                    }
+                }
             }
+
             return true;
         }
 
@@ -85,10 +94,12 @@ namespace SE_Project.Controller
 
             if (tasks == null) return false;
 
+            // Thêm tất cả các task vào danh sách items
             foreach (var task in tasks)
             {
-                items.Add(task);
+                items.Add((IModel)task);
             }
+
             return true;
         }
 

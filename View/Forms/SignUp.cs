@@ -89,7 +89,12 @@ namespace SE_Project.Forms
 
         }
 
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            this.Hide();
+            new Login().Show();
+        }
 
-        // Các phương thức khác giữ nguyên
+
     }
 }

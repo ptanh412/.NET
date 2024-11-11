@@ -145,6 +145,7 @@ namespace SE_Project.View.Forms
 
         private void guna2GradientButton1_Click(object sender, EventArgs e)
         {
+
             try
             {
                 if (string.IsNullOrWhiteSpace(guna2TextBox1.Text))

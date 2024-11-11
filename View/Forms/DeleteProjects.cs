@@ -1,4 +1,5 @@
 ﻿using Guna.UI2.WinForms;
+using SE_Project.Controller;
 using SE_Project.Helpers;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace SE_Project.Forms
@@ -16,6 +18,7 @@ namespace SE_Project.Forms
     {
         DBHelper db; // Instantiate the DBHelper class
         public event EventHandler RequestPanelBack;
+        public event EventHandler ProjectDeleted;
         public DeleteProjects()
         {
             InitializeComponent();
@@ -36,33 +39,33 @@ namespace SE_Project.Forms
 
         private void guna2GradientButton1_Click(object sender, EventArgs e)
         {
-            //string tableName = "projects";
-            //string tableName1 = "completed";
-            //string tableName2 = "inprogress";
-            //string tableName3 = "todolist";
-            //string tableName4 = "starred";
+            string projectName = guna2TextBox1.Text.Trim();
 
-            //string query = $"DELETE FROM {tableName} WHERE name = '{guna2TextBox1.Text}'";
-            //db.DeleteRow(query);
+            if (string.IsNullOrEmpty(projectName))
+            {
+                MessageBox.Show("Vui lòng nhập tên dự án.");
+                return;
+            }
 
-            //string query1 = $"DELETE FROM {tableName1} WHERE name = '{guna2TextBox1.Text}'";
-            //db.DeleteRow(query1);
+            // Gọi phương thức Delete từ ProjectController
+            ProjectController controller = new ProjectController();
+            bool result = controller.DeleteByName(projectName);
 
-            //string query2 = $"DELETE FROM {tableName2} WHERE name = '{guna2TextBox1.Text}'";
-            //db.DeleteRow(query2);
-
-            //string query3 = $"DELETE FROM {tableName3} WHERE name = '{guna2TextBox1.Text}'";
-            //db.DeleteRow(query3);
-
-            //string query4 = $"DELETE FROM {tableName4} WHERE name = '{guna2TextBox1.Text}'";
-            //db.DeleteRow(query4);
-
-            MessageBox.Show("If the Project name exists in the database it will be deleted successfully");
+            if (result)
+            {
+                MessageBox.Show("Dự án đã được xóa thành công.");
+                ProjectDeleted?.Invoke(this, EventArgs.Empty); // Gọi sự kiện ProjectDeleted
+            }
+            else
+            {
+                MessageBox.Show("Không thể xóa dự án. Vui lòng kiểm tra lại tên dự án.");
+            }
         }
 
         private void guna2ImageButton1_Click_1(object sender, EventArgs e)
         {
-
+            this.Dispose(); // Use Dispose if you want to completely remove the UserControl
+            RequestPanelBack?.Invoke(this, EventArgs.Empty);
         }
     }
 }

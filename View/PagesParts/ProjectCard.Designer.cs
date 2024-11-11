@@ -1,6 +1,6 @@
 ﻿namespace SE_Project.PagesParts
 {
-    partial class TaskCard
+    partial class ProjectCard
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,21 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TaskCard));
-            this.guna2ImageRadioButton1 = new Guna.UI2.WinForms.Guna2ImageRadioButton();
-            this.CardTaskTitle = new System.Windows.Forms.Label();
-            this.CardTaskDeadline = new System.Windows.Forms.TextBox();
-            this.labCardTaskDeadline = new System.Windows.Forms.Label();
-            this.CardTaskAssigned = new System.Windows.Forms.TextBox();
-            this.labCardAssigned = new System.Windows.Forms.Label();
-            this.CardTaskDescription = new System.Windows.Forms.TextBox();
-            this.cbCardTaskStatus = new Guna.UI2.WinForms.Guna2ComboBox();
-            this.labCardTaskStatus = new System.Windows.Forms.Label();
-            this.labCardTaskDescription = new System.Windows.Forms.Label();
-            this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ProjectCard));
             this.guna2Panel1 = new Guna.UI2.WinForms.Guna2Panel();
-            this.CardProjectName = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.CardDueDate = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.CardAssigned = new System.Windows.Forms.TextBox();
@@ -54,7 +41,6 @@
             this.guna2Panel2 = new Guna.UI2.WinForms.Guna2Panel();
             this.guna2ImageRadioButton1 = new Guna.UI2.WinForms.Guna2ImageRadioButton();
             this.CardTitle = new System.Windows.Forms.Label();
-            this.btn_UpdateTask = new Guna.UI2.WinForms.Guna2Button();
             this.guna2Panel1.SuspendLayout();
             this.guna2Panel2.SuspendLayout();
             this.SuspendLayout();
@@ -63,9 +49,6 @@
             // 
             this.guna2Panel1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(118)))), ((int)(((byte)(212)))));
             this.guna2Panel1.BorderThickness = 1;
-            this.guna2Panel1.Controls.Add(this.btn_UpdateTask);
-            this.guna2Panel1.Controls.Add(this.CardProjectName);
-            this.guna2Panel1.Controls.Add(this.label5);
             this.guna2Panel1.Controls.Add(this.CardDueDate);
             this.guna2Panel1.Controls.Add(this.label4);
             this.guna2Panel1.Controls.Add(this.CardAssigned);
@@ -78,31 +61,9 @@
             this.guna2Panel1.Location = new System.Drawing.Point(17, 15);
             this.guna2Panel1.Margin = new System.Windows.Forms.Padding(13, 12, 0, 0);
             this.guna2Panel1.Name = "guna2Panel1";
-            this.guna2Panel1.Size = new System.Drawing.Size(253, 423);
+            this.guna2Panel1.Size = new System.Drawing.Size(253, 347);
             this.guna2Panel1.TabIndex = 0;
-            // 
-            // CardProjectName
-            // 
-            this.CardProjectName.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.CardProjectName.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CardProjectName.Location = new System.Drawing.Point(4, 306);
-            this.CardProjectName.Margin = new System.Windows.Forms.Padding(4);
-            this.CardProjectName.Multiline = true;
-            this.CardProjectName.Name = "CardProjectName";
-            this.CardProjectName.Size = new System.Drawing.Size(245, 37);
-            this.CardProjectName.TabIndex = 11;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.ForeColor = System.Drawing.Color.Black;
-            this.label5.Location = new System.Drawing.Point(4, 283);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(121, 19);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Project Name";
+            this.guna2Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.guna2Panel1_Paint);
             // 
             // CardDueDate
             // 
@@ -115,6 +76,7 @@
             this.CardDueDate.Size = new System.Drawing.Size(245, 37);
             this.CardDueDate.TabIndex = 9;
             this.CardDueDate.Text = "Project Management System";
+            this.CardDueDate.TextChanged += new System.EventHandler(this.CardDueDate_TextChanged);
             // 
             // label4
             // 
@@ -127,6 +89,7 @@
             this.label4.Size = new System.Drawing.Size(83, 19);
             this.label4.TabIndex = 8;
             this.label4.Text = "Deadline";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // CardAssigned
             // 
@@ -139,6 +102,7 @@
             this.CardAssigned.Size = new System.Drawing.Size(245, 37);
             this.CardAssigned.TabIndex = 7;
             this.CardAssigned.Text = "Project Management System";
+            this.CardAssigned.TextChanged += new System.EventHandler(this.CardAssigned_TextChanged);
             // 
             // label1
             // 
@@ -148,9 +112,10 @@
             this.label1.Location = new System.Drawing.Point(3, 103);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(145, 19);
+            this.label1.Size = new System.Drawing.Size(110, 19);
             this.label1.TabIndex = 6;
-            this.label1.Text = "Assigned Person";
+            this.label1.Text = "Assigned By";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // CardDesc
             // 
@@ -193,12 +158,13 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Century Gothic", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Black;
-            this.label3.Location = new System.Drawing.Point(5, 233);
+            this.label3.Location = new System.Drawing.Point(4, 244);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 23);
             this.label3.TabIndex = 3;
             this.label3.Text = "Status";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label2
             // 
@@ -211,6 +177,7 @@
             this.label2.Size = new System.Drawing.Size(100, 19);
             this.label2.TabIndex = 1;
             this.label2.Text = "Description";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // guna2Panel2
             // 
@@ -224,6 +191,7 @@
             this.guna2Panel2.Name = "guna2Panel2";
             this.guna2Panel2.Size = new System.Drawing.Size(253, 39);
             this.guna2Panel2.TabIndex = 0;
+            this.guna2Panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.guna2Panel2_Paint);
             // 
             // guna2ImageRadioButton1
             // 
@@ -249,46 +217,22 @@
             this.CardTitle.Size = new System.Drawing.Size(50, 23);
             this.CardTitle.TabIndex = 0;
             this.CardTitle.Text = "Task";
+            this.CardTitle.Click += new System.EventHandler(this.CardTitle_Click);
             // 
-            // btn_UpdateTask
-            // 
-            this.btn_UpdateTask.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.btn_UpdateTask.BorderRadius = 22;
-            this.btn_UpdateTask.CheckedState.FillColor = System.Drawing.Color.DarkGreen;
-            this.btn_UpdateTask.CheckedState.ForeColor = System.Drawing.Color.White;
-            this.btn_UpdateTask.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btn_UpdateTask.DisabledState.BorderColor = System.Drawing.Color.DarkGray;
-            this.btn_UpdateTask.DisabledState.CustomBorderColor = System.Drawing.Color.DarkGray;
-            this.btn_UpdateTask.DisabledState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(169)))), ((int)(((byte)(169)))), ((int)(((byte)(169)))));
-            this.btn_UpdateTask.DisabledState.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(141)))), ((int)(((byte)(141)))), ((int)(((byte)(141)))));
-            this.btn_UpdateTask.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.btn_UpdateTask.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btn_UpdateTask.ForeColor = System.Drawing.Color.White;
-            this.btn_UpdateTask.Location = new System.Drawing.Point(7, 364);
-            this.btn_UpdateTask.Margin = new System.Windows.Forms.Padding(4);
-            this.btn_UpdateTask.Name = "btn_UpdateTask";
-            this.btn_UpdateTask.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.btn_UpdateTask.Size = new System.Drawing.Size(240, 55);
-            this.btn_UpdateTask.TabIndex = 12;
-            this.btn_UpdateTask.Text = "Update Task";
-            this.btn_UpdateTask.Click += new System.EventHandler(this.btn_UpdateTask_Click);
-            // 
-            // TaskCard
+            // ProjectCard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.Controls.Add(this.guna2Panel1);
             this.Margin = new System.Windows.Forms.Padding(4);
-            this.Name = "TaskCard";
-            this.Size = new System.Drawing.Size(373, 516);
+            this.Name = "ProjectCard";
+            this.Size = new System.Drawing.Size(330, 388);
             this.Load += new System.EventHandler(this.ProjectCard_Load);
             this.guna2Panel1.ResumeLayout(false);
             this.guna2Panel1.PerformLayout();
             this.guna2Panel2.ResumeLayout(false);
             this.guna2Panel2.PerformLayout();
-            this.guna2Panel1.ResumeLayout(false);
-            this.guna2Panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -307,8 +251,5 @@
         private System.Windows.Forms.TextBox CardAssigned;
         private System.Windows.Forms.TextBox CardDueDate;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox CardProjectName;
-        private System.Windows.Forms.Label label5;
-        private Guna.UI2.WinForms.Guna2Button btn_UpdateTask;
     }
 }

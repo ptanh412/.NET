@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using SE_Project.Model;
+using System.Data;
+
 using System.Configuration;
 
 namespace SE_Project.Helpers
@@ -249,6 +251,51 @@ namespace SE_Project.Helpers
             }
             return tasks;
         }
+
+        public static List<TaskModel> GetTasksByProjectId(int projectId)
+        {
+            List<TaskModel> tasks = new List<TaskModel>();
+
+            using (SqlConnection connection = new SqlConnection(conString))
+            {
+                try
+                {
+                    connection.Open();
+                    string query = "SELECT id, name, user_id, description, project_id, status, due_date, created_at FROM tasks WHERE project_id = @ProjectId";
+                    using (SqlCommand command = new SqlCommand(query, connection))
+                    {
+                        command.Parameters.AddWithValue("@ProjectId", projectId);
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                TaskModel task = new TaskModel
+                                {
+                                    Id = reader.GetInt32(0), // id
+                                    Name = reader.GetString(1), // name
+                                    User_id = reader.GetInt32(2), // user_id
+                                    Description = reader.GetString(3), // description
+                                    Project_id = reader.GetInt32(4), // project_id
+                                    Status = reader.GetString(5), // status
+                                    Due_date = reader.GetDateTime(6), // due_date
+                                    CreatedAt = reader.GetDateTime(7) // created_at
+                                };
+
+                                tasks.Add(task);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.Message);
+                }
+            }
+
+            return tasks;
+        }
+
         public static bool UpdateTask(int taskId, string name, string description, int projectId, string status, DateTime dueDate, int assignedUserId)
         {
             using (SqlConnection con = new SqlConnection(conString))
@@ -328,51 +375,91 @@ namespace SE_Project.Helpers
                 }
             }
         }
-        public static List<TaskModel> GetTasksByProjectId(int projectId)
+        public static bool CreateProject(string name, string description, int userId)
         {
-            List<TaskModel> tasks = new List<TaskModel>();
-
             using (SqlConnection con = new SqlConnection(conString))
             {
-                string query = "SELECT t.*, p.name AS project_name, u.name AS user_name FROM tasks t " +
-                               "JOIN projects p ON t.project_id = p.id " +
-                               "JOIN userlist u ON t.user_id = u.id " +
-                               "WHERE t.project_id = @ProjectId";
+                string query = "INSERT INTO projects (name, description, user_id) VALUES (@name, @description, @userId)";
 
                 using (SqlCommand cmd = new SqlCommand(query, con))
                 {
-                    cmd.Parameters.AddWithValue("@ProjectId", projectId);
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@description", description);
+                    cmd.Parameters.AddWithValue("@userId", userId);
 
                     try
                     {
                         con.Open();
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                tasks.Add(new TaskModel
-                                {
-                                    Id = (int)reader["id"],
-                                    Name = reader["name"].ToString(),
-                                    Description = reader["description"].ToString(),
-                                    Project_id = (int)reader["project_id"],
-                                    ProjectName = reader["project_name"].ToString(),
-                                    Status = reader["status"].ToString(),
-                                    Due_date = (DateTime)reader["due_date"],
-                                    User_id = (int)reader["user_id"],
-                                    Assigned = reader["user_name"].ToString()
-                                });
-                            }
-                        }
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0;
                     }
                     catch (SqlException ex)
                     {
                         MessageBox.Show("Lỗi SQL: " + ex.Message);
+                        return false;
                     }
                 }
             }
-            return tasks;
         }
+       
+
+
+
+
+        public static bool UpdateProject(int projectId, string name, string description, int userId)
+        {
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                string query = "UPDATE projects SET name = @name, description = @description, user_id = @userId WHERE id = @projectId";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@projectId", projectId);
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@description", description);
+                    cmd.Parameters.AddWithValue("@userId", userId);
+
+                    try
+                    {
+                        con.Open();
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show("Lỗi SQL: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+        public static bool DeleteProject(int projectId)
+        {
+            using (SqlConnection con = new SqlConnection(conString))
+            {
+                string query = "DELETE FROM projects WHERE id = @projectId";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@projectId", projectId);
+
+                    try
+                    {
+                        con.Open();
+                        int result = cmd.ExecuteNonQuery();
+                        return result > 0;
+                    }
+                    catch (SqlException ex)
+                    {
+                        MessageBox.Show("Lỗi SQL: " + ex.Message);
+                        return false;
+                    }
+                }
+            }
+        }
+
+
+
         public static bool CheckProjectExists(int projectId)
         {
             using (SqlConnection conn = new SqlConnection(conString))
@@ -569,8 +656,6 @@ namespace SE_Project.Helpers
 
             return project;
         }
-
-
 
     }
 }
